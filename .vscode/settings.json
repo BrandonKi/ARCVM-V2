@@ -1,5 +1,12 @@
 {
     "cmake.sourceDirectory": "${workspaceFolder}/.",
     "cmakeExplorer.buildDir": "${workspaceFolder}//build",
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "files.associations": {
+        "ostream": "cpp",
+        "cstddef": "cpp",
+        "iostream": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp"
+    }
 }
