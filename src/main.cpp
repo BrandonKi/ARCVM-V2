@@ -4,7 +4,7 @@
 
 #include "Arcvm.h"
 
-// for now this just returns the filename but in the future this will actually parse the arguments and pass them into the VM 
+// TODO for now this just returns the filename but in the future this will actually parse the arguments and pass them into the VM 
 std::string parseArgs(int, char**);
 
 int main(int argc, char** argv) {
@@ -23,6 +23,8 @@ int main(int argc, char** argv) {
 }
 
 std::string parseArgs(int argc, char** argv) {
+    // TODO this is not complete at all
+    // at the moment it expects one argument that is a valid file path
     std::vector<std::string> args(argv, argv + argc);
     for(const std::string& arg : args) {
         if(arg == "TEMPORARY OPTION REPLACE MEEEEEE") {
