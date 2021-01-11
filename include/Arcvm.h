@@ -66,6 +66,13 @@ class Arcvm {
         u64 program_counter;
         u64 frame_pointer;
 
+        
+        template <typename T, typename U>
+        T reinterpret(U data) {
+            T temp;
+            memcpy_s(&T, sizeof(T), &U, sizeof(U));
+            return T;
+        }
 
 };
 
