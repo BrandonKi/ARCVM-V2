@@ -1,9 +1,23 @@
 #ifndef ARCVM_HEADER_GUARD
 #define ARCVM_HEADER_GUARD
 
+
+/** Expected file format
+ * 
+ * signature
+ * 
+ * 0xff 0xff
+ * label table start
+ * num of label table elements
+ * label table data
+ * 
+ * code
+ * 
+ */
+
+
 #include <cstdint>
 #include <vector>
-
 
 using i8  = int8_t;
 using i16 = int16_t;
@@ -26,10 +40,19 @@ class Arcvm {
             u8  x8;
         };
 
+        enum instruction {
+                ret, mov_register_value, mov_register_address, 
+                mov_register_register, mov_address_value, mov_address_address, mov_address_register, 
+                push_value, push_address, push_register, pop_register, pop_address,
+                add, add_register_register, sub, sub_register_register, mul, mul_register_register,
+                div, div_register_register, mod, mod_register_register, jump, call
+            };
+
         Arcvm();
         ~Arcvm();
         void loadProgram(const u8*, size_t);
         i32 run();
+        void execute();
 
     private:
         reg registers[16];
@@ -39,9 +62,9 @@ class Arcvm {
         const u8 *program;
         size_t size;
 
-        u8 *stack_pointer;
-        u8 *program_counter;
-        u8 *frame_pointer;
+        u64 stack_pointer;
+        u64 program_counter;
+        u64 frame_pointer;
 
 
 };
