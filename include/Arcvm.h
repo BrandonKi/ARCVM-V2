@@ -50,30 +50,48 @@ class Arcvm {
 
         Arcvm();
         ~Arcvm();
-        void loadProgram(const u8*, size_t);
+        void loadProgram(char*, size_t);
         i32 run();
         void execute();
 
     private:
-        reg registers[16];
-        std::vector<u64> stack;
-        u8* heap;
-
-        const u8 *program;
-        size_t size;
-
         u64 stack_pointer;
         u64 program_counter;
         u64 frame_pointer;
 
+        reg registers[16] = {0};
+        std::vector<u64> stack;
+        u8* heap;
+
+        u8 *program;
+        size_t size;
+
         
         template <typename T, typename U>
-        T reinterpret(U data) {
+        constexpr inline T reinterpret(U data) const {
             T temp;
-            memcpy_s(&T, sizeof(T), &U, sizeof(U));
-            return T;
+            memcpy_s(&temp, sizeof(T), &data, sizeof(U));
+            return temp;
         }
 
 };
 
 #endif
+
+/*
+push_value_float_32 
+push_value_float_64 
+
+push_value_signed_1
+push_value_signed_8
+push_value_signed_16
+push_value_signed_32
+push_value_signed_64
+
+push_value_unsigned_1
+push_value_unsigned_8
+push_value_unsigned_16
+push_value_unsigned_32
+push_value_unsigned_64
+
+*/
