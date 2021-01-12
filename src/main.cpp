@@ -12,13 +12,14 @@ int main(int argc, char** argv) {
 
     // read the file into a u8 buffer
     // there is probably a more efficient way to do this though
-    std::ifstream input_stream(filename);
-    std::stringstream buffer;
-    buffer << input_stream.rdbuf();
-    const u8 *data = reinterpret_cast<const u8*>(buffer.str().c_str());
-
+    std::ifstream input_file(filename, std::ios::in|std::ios::binary|std::ios::ate);
+    u32 size = static_cast<u32>(input_file.tellg());
+    input_file.seekg (0, std::ios::beg);
+    char* buffer = new char[size];
+    input_file.read(buffer, size);
+    input_file.close();
     Arcvm vm;
-    vm.loadProgram(data, buffer.str().size());  // will need to pass args in some way also
+    vm.loadProgram(buffer, size);  // will need to pass args in some way also
     vm.run();
 }
 
