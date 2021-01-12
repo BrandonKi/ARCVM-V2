@@ -9,7 +9,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
-            "args": [],
+            "args": ["C:\\Users\\Kirin\\Desktop\\ARCVM-V2\\test.arcb"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
