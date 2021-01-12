@@ -1,6 +1,8 @@
 #include "Arcvm.h"
 
-Arcvm::Arcvm() {
+Arcvm::Arcvm():
+    stack_pointer(0), program_counter(0), frame_pointer(0)
+{
     heap = (u8*)malloc(100000);
 }
 
@@ -8,19 +10,19 @@ Arcvm::~Arcvm() {
     free(heap);
 }
 
-void Arcvm::loadProgram(const u8 *program, size_t size) {
-    this->program = program;
+void Arcvm::loadProgram(char* program, size_t size) {
+    this->program = reinterpret<u8*>(program);
     this->size = size;
 }
 
 i32 Arcvm::run() {
 
-    while(true) {
-        ++program_counter;
+    while(program_counter != size) {
         execute();
+        ++program_counter;
     }
 
-    return 0;
+    return registers[0].x32;
 }
 
 void Arcvm::execute() {
@@ -28,13 +30,22 @@ void Arcvm::execute() {
         case instruction::ret:
             break;
         case instruction::mov_register_value:
-
+        {
+            u8 reg = program[++program_counter];
+            u64 value = *reinterpret<u64*>(&program[++program_counter]);
+            program_counter += 7; // move forwards 7 bytes to get past the immediate value
+            registers[reg].x64 = value;
             break;
-        case instruction::mov_register_address:
+        }
+        case instruction::mov_register_address: 
             break;
         case instruction::mov_register_register:
-            
+        {
+            u8 dest = program[++program_counter];
+            u8 src = program[++program_counter];
+            registers[dest] = registers[src];
             break;
+        }
         case instruction::mov_address_value:
             break;
         case instruction::mov_address_address:
@@ -42,6 +53,9 @@ void Arcvm::execute() {
         case instruction::mov_address_register:
             break;
         case instruction::push_value:
+            u64 value = *reinterpret<u64*>(&program[++program_counter]);
+            program_counter += 7; // move forwards 7 bytes to get past the immediate value
+            stack.push_back(value);
             break;
         case instruction::push_address:
             break;
