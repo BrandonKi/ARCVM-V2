@@ -1,6 +1,11 @@
 {
+    "cmake.configureSettings": {
+        "FIX_TEST_UI_BUG": "True"
+    },
     "cmake.sourceDirectory": "${workspaceFolder}/.",
-    "cmakeExplorer.buildDir": "${workspaceFolder}//build",
+    "cmakeExplorer.buildDir": "${buildDirectory}",
+    "cmakeExplorer.buildConfig": "${buildType}",
+    "cmakeExplorer.debugConfig": "Test Debug",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "files.associations": {
         "ostream": "cpp",
