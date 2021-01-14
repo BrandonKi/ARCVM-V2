@@ -3,7 +3,7 @@
 Arcvm::Arcvm():
     stack_pointer(0), program_counter(0), frame_pointer(0)
 {
-    heap = (u8*)malloc(100000);
+    heap = (u8*)malloc(10); //TODO actually implement support for the heap
 }
 
 Arcvm::~Arcvm() {

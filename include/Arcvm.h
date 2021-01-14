@@ -55,7 +55,6 @@ class Arcvm {
         ~Arcvm();
         void loadProgram(char*, size_t);
         i32 run();
-        void execute();
 
     private:
         u64 stack_pointer;
@@ -69,7 +68,11 @@ class Arcvm {
         u8 *program;
         size_t size;
 
+        void execute();
         
+        /**
+         * reinterpret data as a different type
+         */
         template <typename T, typename U>
         constexpr inline T reinterpret(U data) const {
             T temp;
