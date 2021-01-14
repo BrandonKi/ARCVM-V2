@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <iostream>
 
 using i8  = int8_t;
 using i16 = int16_t;
@@ -33,7 +34,7 @@ using f64 = double_t;
 class Arcvm {
 
     public:
-        union reg {
+        union Register {
             u64 x64;
             u32 x32;
             u16 x16;
@@ -44,8 +45,10 @@ class Arcvm {
                 ret, mov_register_value, mov_register_address, 
                 mov_register_register, mov_address_value, mov_address_address, mov_address_register, 
                 push_value, push_address, push_register, pop_register, pop_address,
-                add, add_register_register, sub, sub_register_register, mul, mul_register_register,
-                div, div_register_register, mod, mod_register_register, jump, call
+                addu, addu_register_register, adds, adds_register_register, subu, subu_register_register,
+                subs, subs_register_register, mulu, mulu_register_register, muls, muls_register_register,
+                divu, divu_register_register, divs, divs_register_register, modu, modu_register_register,
+                mods, mods_register_register, jump_short, jump_long, call
             };
 
         Arcvm();
@@ -59,7 +62,7 @@ class Arcvm {
         u64 program_counter;
         u64 frame_pointer;
 
-        reg registers[16] = {0};
+        Register registers[16] = {0};
         std::vector<u64> stack;
         u8* heap;
 
@@ -72,6 +75,22 @@ class Arcvm {
             T temp;
             memcpy_s(&temp, sizeof(T), &data, sizeof(U));
             return temp;
+        }
+
+        /**
+         * return a pointer to the next byte in the program 
+         * and increment the program counter accordingly
+         */
+        constexpr inline u8 *nextByte() {
+            return &program[++program_counter];
+        }
+
+        /**
+         * return the register represented by the given byte
+         * 
+         */
+        constexpr inline Register toRegister(u8 reg_num) {
+            return registers[reg_num];
         }
 
 };
