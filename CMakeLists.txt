@@ -25,14 +25,14 @@ set(test_bin_dir ${CMAKE_SOURCE_DIR}/tests/bin)
 
 add_executable(test0 tests/test0.cpp src/Arcvm.cpp)
 set_target_properties( test0
-PROPERTIES
-RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
 add_executable(test1 tests/test1.cpp src/Arcvm.cpp)
 set_target_properties( test1
-PROPERTIES
-RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
 # This mess of if statements is to get around a bug in the extension I'm using for the test UI
