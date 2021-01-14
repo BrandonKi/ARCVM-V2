@@ -31,5 +31,5 @@ int main(int, char**) {
 
     Arcvm VM;
     VM.loadProgram(program, sizeof(program));
-    return VM.run() == 0 ? 0 : 1;
+    return VM.run() == 200 ? 0 : 1;
 }
