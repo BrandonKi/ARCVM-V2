@@ -54,7 +54,7 @@ class Arcvm {
         Arcvm();
         ~Arcvm();
         void loadProgram(char*, size_t);
-        i32 run();
+        u64 run();
 
     private:
         u64 stack_pointer;
@@ -67,6 +67,8 @@ class Arcvm {
 
         u8 *program;
         size_t size;
+
+        u64 exit_code;
 
         void execute();
         
