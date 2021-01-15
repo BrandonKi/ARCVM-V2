@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(ARCVM-V2 VERSION 0.1.0)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests)
 
 cmake_policy(SET CMP0054 NEW)
 
