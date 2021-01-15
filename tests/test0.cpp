@@ -1,12 +1,11 @@
-#include "ARCVM.h"
+#include "test.h"
 
 /**
  * push two unsigned 64 bit values to the stack and add them
  */
-#define vm Arcvm::instruction
 int main(int, char**) {
     
-    char program[] = {
+    std::vector<char> program = {
         vm::push_value,
         0x64,
         0x00,
@@ -28,8 +27,6 @@ int main(int, char**) {
         vm::addu,
         vm::ret
     };
-
-    Arcvm VM;
-    VM.loadProgram(program, sizeof(program));
-    return VM.run() == 200 ? 0 : 1;
+    expect(200);
+    return runTest(program);
 }
