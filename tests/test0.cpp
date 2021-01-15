@@ -27,6 +27,6 @@ int main(int, char**) {
         vm::addu,
         vm::ret
     };
-    expect(200);
+    expect<u32>(200);
     return runTest(program);
 }
