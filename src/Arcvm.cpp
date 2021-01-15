@@ -15,7 +15,7 @@ void Arcvm::loadProgram(char* program, size_t size) {
     this->size = size;
 }
 
-u64 Arcvm::run() {
+i32 Arcvm::run() {
 
     while(program_counter != size) {
         execute();
@@ -28,7 +28,7 @@ u64 Arcvm::run() {
 void Arcvm::execute() {
     switch (program[program_counter]) {
         case instruction::ret:
-            exit_code = stack.back();   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
+            exit_code = reinterpret<i32>(static_cast<u32>(stack.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
             break;
         case instruction::mov_register_value:
         {
