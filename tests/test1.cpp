@@ -3,7 +3,7 @@
 /**
  * push two signed 64 bit values to the stack and add them
  */
-int main() {
+int main(int, char**) {
 
     std::vector<u8> program = {
         vm::push_value,
