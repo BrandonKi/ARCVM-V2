@@ -11,7 +11,21 @@
  * num of label table elements
  * label table data
  * 
+ * init section
  * code
+ * 
+ */
+
+/** Stack frame layout
+ * 
+ * parameters
+ * 
+ * return address
+ * 
+ * saved base pointer   <-- base pointer
+ * 
+ * locals
+ * ...      <-- stack pointer
  * 
  */
 
@@ -42,7 +56,7 @@ class Arcvm {
         };
 
         enum instruction {
-                ret, mov_register_value, mov_register_address, 
+                exit, ret, mov_register_value, mov_register_address, 
                 mov_register_register, mov_address_value, mov_address_address, mov_address_register, 
                 push_value, push_address, push_register, pop_register, pop_address,
                 addu, addu_register_register, adds, adds_register_register, subu, subu_register_register,
@@ -59,7 +73,7 @@ class Arcvm {
     private:
         u64 stack_pointer;
         u64 program_counter;
-        u64 frame_pointer;
+        u64 base_pointer;
 
         Register registers[16] = {0};
         std::vector<u64> stack;

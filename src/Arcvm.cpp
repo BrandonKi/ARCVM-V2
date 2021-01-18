@@ -1,7 +1,7 @@
 #include "Arcvm.h"
 
 Arcvm::Arcvm():
-    stack_pointer(0), program_counter(0), frame_pointer(0)
+    stack_pointer(0), program_counter(0), base_pointer(0)
 {
     heap = (u8*)malloc(10); //TODO actually implement support for the heap
 }
@@ -13,7 +13,7 @@ Arcvm::~Arcvm() {
 void Arcvm::loadProgram(char* program, size_t size) {
     this->program = reinterpret<u8*>(program);
     this->size = size;
-}
+} 
 
 i32 Arcvm::run() {
 
@@ -27,9 +27,15 @@ i32 Arcvm::run() {
 
 void Arcvm::execute() {
     switch (program[program_counter]) {
+        case instruction::exit:
+        {
+            exit_code = reinterpret<i32>(static_cast<u32>(stack.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
+        }
         case instruction::ret:
+        {
             exit_code = reinterpret<i32>(static_cast<u32>(stack.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
             break;
+        }
         case instruction::mov_register_value:
         {
             u8 reg_num = *nextByte();
