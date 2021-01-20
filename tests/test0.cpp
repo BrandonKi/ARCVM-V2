@@ -5,7 +5,20 @@
  */
 int main(int, char**) {
     
-    std::vector<char> program = {
+    std::vector<u8> program = {
+        SIGNATURE,
+        
+        // init section
+        vm::call_short,
+        0x07,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        vm::exit,
+
+        // code section
         vm::push_value,
         0x64,
         0x00,
