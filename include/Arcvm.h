@@ -6,7 +6,6 @@
  * 
  * signature
  * 
- * 0xff 0xff
  * label table start
  * num of label table elements
  * label table data
@@ -62,16 +61,15 @@ class Arcvm {
                 addu, addu_register_register, adds, adds_register_register, subu, subu_register_register,
                 subs, subs_register_register, mulu, mulu_register_register, muls, muls_register_register,
                 divu, divu_register_register, divs, divs_register_register, modu, modu_register_register,
-                mods, mods_register_register, jump_short, jump_long, call
+                mods, mods_register_register, jump_short, jump_long, call_short, call_long
             };
 
         Arcvm();
         ~Arcvm();
-        void loadProgram(char*, size_t);
+        bool loadProgram(char*, size_t);
         i32 run();
 
     private:
-        u64 stack_pointer;
         u64 program_counter;
         u64 base_pointer;
 
@@ -84,6 +82,8 @@ class Arcvm {
 
         i32 exit_code;
 
+    
+        bool verifySignature();
         void execute();
         
         /**
@@ -94,6 +94,13 @@ class Arcvm {
             T temp;
             memcpy_s(&temp, sizeof(T), &data, sizeof(U));
             return temp;
+        }
+
+        /**
+         * return a pointer to the currnet byte in the program 
+         */
+        constexpr inline u8 *currentByte() {
+            return &program[program_counter];
         }
 
         /**
@@ -110,6 +117,27 @@ class Arcvm {
          */
         constexpr inline Register toRegister(u8 reg_num) {
             return registers[reg_num];
+        }
+
+        /**
+         * return the current stack pointer
+         */
+        inline u64 stack_pointer() {
+            return stack.size() - 1;
+        }
+
+        constexpr inline bool jump(u8 address) {
+            if(address >= size) //TODO fix this asap it is just a temporary solution and it doesn't even work
+                return false;
+            program_counter = static_cast<u64>(address);
+            return true;
+        }
+
+        constexpr inline bool jump(u64 address) {
+            if(address >= size) //TODO fix this asap it is just a temporary solution and it doesn't even work
+                return false;
+            program_counter = address;
+            return true;
         }
 
 };

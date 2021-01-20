@@ -1,7 +1,7 @@
 #include "Arcvm.h"
 
 Arcvm::Arcvm():
-    stack_pointer(0), program_counter(0), base_pointer(0)
+    program_counter(0), base_pointer(0)
 {
     heap = (u8*)malloc(10); //TODO actually implement support for the heap
 }
@@ -10,10 +10,19 @@ Arcvm::~Arcvm() {
     free(heap);
 }
 
-void Arcvm::loadProgram(char* program, size_t size) {
+bool Arcvm::loadProgram(char* program, size_t size) {
     this->program = reinterpret<u8*>(program);
     this->size = size;
-} 
+    if(verifySignature() == false)
+        return false;
+    return true;
+}
+
+inline bool Arcvm::verifySignature() {
+    const char* signature = "\xfa\xca\xde";
+    program += 3;
+    return memcmp(signature, program - 3, 3) == 0;
+}
 
 i32 Arcvm::run() {
 
@@ -30,6 +39,7 @@ void Arcvm::execute() {
         case instruction::exit:
         {
             exit_code = reinterpret<i32>(static_cast<u32>(stack.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
+            break;
         }
         case instruction::ret:
         {
@@ -263,10 +273,26 @@ void Arcvm::execute() {
         {
             break;
         }
-        case instruction::call:
+        case instruction::call_short:
+        {
+            // old return address
+            stack.push_back(program_counter);
+            // old base pointer
+            stack.push_back(base_pointer);
+            // the new base pointer is equal to the current stack pointer
+            base_pointer = stack_pointer();
+            u8 jump_address = reinterpret<u8>(*nextByte());
+            u32 local_variable_space = *reinterpret<u32*>(nextByte());
+            program_counter += 3;
+            stack.resize(stack.size() + local_variable_space, 0);
+            jump(jump_address);
+            break;
+        }
+        case instruction::call_long:
         {
             break;
         }
+
         default:
             break;
     }
