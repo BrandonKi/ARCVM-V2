@@ -19,8 +19,10 @@ int main(int argc, char** argv) {
     input_file.read(buffer, size);
     input_file.close();
     Arcvm vm;
-    vm.loadProgram(buffer, size);  // will need to pass args in some way also
-    vm.run();
+    if(vm.loadProgram(buffer, size) == false)  // will need to pass args in some way also
+        std::cout << "ERROR FILE FORMAT UNSUPPORTED" << std::endl;
+    else
+        vm.run();
 }
 
 std::string parseArgs(int argc, char** argv) {
