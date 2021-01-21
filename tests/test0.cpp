@@ -9,9 +9,10 @@ int main(int, char**) {
         SIGNATURE,
         
         // init section
-        vm::call_short,
-        0x07,
+        vm::push_value_unsigned_8,
         0x00,
+        vm::call_short,
+        0x09,
         0x00,
         0x00,
         0x00,

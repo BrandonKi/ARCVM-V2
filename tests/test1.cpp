@@ -6,6 +6,20 @@
 int main(int, char**) {
 
     std::vector<u8> program = {
+        SIGNATURE,
+        
+        // init section
+        vm::push_value_unsigned_8,
+        0x00,
+        vm::call_short,
+        0x09,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        vm::exit,
+
+        // code section
         vm::push_value,
         0xf0,
         0xff,
