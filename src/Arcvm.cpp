@@ -26,7 +26,7 @@ inline bool Arcvm::verifySignature() {
 
 i32 Arcvm::run() {
 
-    while(program_counter != size) {
+    while(program_counter <= size) {
         execute();
         ++program_counter;
     }
@@ -39,11 +39,19 @@ void Arcvm::execute() {
         case instruction::exit:
         {
             exit_code = reinterpret<i32>(static_cast<u32>(stack.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
+            // set the program counter equal to the max value so the program ends
+            // I should probably change this in the future
+            program_counter = size;                     
             break;
         }
         case instruction::ret:
         {
-            exit_code = reinterpret<i32>(static_cast<u32>(stack.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
+            u64 num_of_params = stack[static_cast<size_t>(base_pointer - 2)];
+            u64 return_address = stack[static_cast<size_t>(base_pointer - 1)];
+            u64 new_base_pointer = stack[static_cast<size_t>(base_pointer)];
+            stack.erase(stack.begin() + static_cast<i32>(base_pointer - num_of_params - 2), stack.end() - 1);
+            base_pointer = new_base_pointer;
+            jump(return_address);
             break;
         }
         case instruction::mov_register_value:
@@ -70,6 +78,80 @@ void Arcvm::execute() {
         case instruction::mov_address_register:
             break;
         case instruction::push_value:
+        {
+            u64 value = *reinterpret<u64*>(nextByte());
+            program_counter += 7; // move forwards 7 bytes to get past the immediate value
+            stack.push_back(value);
+            break;
+        }
+        case push_value_float_32:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        {
+            f32 value = *reinterpret<f32*>(nextByte());
+            program_counter += 3; // move forwards 3 bytes to get past the immediate value
+            stack.push_back(reinterpret<u64>(value));
+            break;
+        }
+        case push_value_float_64:
+        {
+            f64 value = *reinterpret<f64*>(nextByte());
+            program_counter += 7; // move forwards 7 bytes to get past the immediate value
+            stack.push_back(reinterpret<u64>(value));
+            break;
+        }
+        case push_value_1:
+        {
+            u8 value = (*nextByte()) & 0x01;
+            stack.push_back(static_cast<u64>(value));
+            break;
+        }
+        case push_value_signed_8:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        {
+            i8 value = reinterpret<i8>(*nextByte());
+            stack.push_back(reinterpret<u64>(value));
+            break;
+        }
+        case push_value_signed_16:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        {
+            i16 value = *reinterpret<i16*>(nextByte());
+            ++program_counter; // move forwards 1 byte to get past the immediate value
+            stack.push_back(reinterpret<u64>(value));
+            break;
+        }
+        case push_value_signed_32:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        {
+            i32 value = *reinterpret<i32*>(nextByte());
+            program_counter += 3; // move forwards 3 bytes to get past the immediate value
+            stack.push_back(reinterpret<u64>(value));
+            break;
+        }
+        case push_value_signed_64:
+        {
+            i64 value = *reinterpret<i64*>(nextByte());
+            program_counter += 7; // move forwards 7 bytes to get past the immediate value
+            stack.push_back(reinterpret<u64>(value));
+            break;
+        }
+        case push_value_unsigned_8:
+        {
+            u8 value = *nextByte();
+            stack.push_back(static_cast<u64>(value));
+            break;
+        }
+        case push_value_unsigned_16:
+        {
+            u16 value = *reinterpret<u16*>(nextByte());
+            ++program_counter; // move forwards 1 byte to get past the immediate value
+            stack.push_back(static_cast<u64>(value));
+            break;
+        }
+        case push_value_unsigned_32:
+        {
+            u32 value = *reinterpret<u32*>(nextByte());
+            program_counter += 3; // move forwards 3 bytes to get past the immediate value
+            stack.push_back(static_cast<u64>(value));
+            break;
+        }
+        case push_value_unsigned_64:
         {
             u64 value = *reinterpret<u64*>(nextByte());
             program_counter += 7; // move forwards 7 bytes to get past the immediate value
@@ -275,15 +357,15 @@ void Arcvm::execute() {
         }
         case instruction::call_short:
         {
+            u8 jump_address = reinterpret<u8>(*nextByte());
+            u32 local_variable_space = *reinterpret<u32*>(nextByte());
+            program_counter += 3;
             // old return address
-            stack.push_back(program_counter);
+            stack.push_back(program_counter + 1);   // add one more to the program counter because we want jump to the next instruction when returning
             // old base pointer
             stack.push_back(base_pointer);
             // the new base pointer is equal to the current stack pointer
             base_pointer = stack_pointer();
-            u8 jump_address = reinterpret<u8>(*nextByte());
-            u32 local_variable_space = *reinterpret<u32*>(nextByte());
-            program_counter += 3;
             stack.resize(stack.size() + local_variable_space, 0);
             jump(jump_address);
             break;

@@ -6,10 +6,6 @@
  * 
  * signature
  * 
- * label table start
- * num of label table elements
- * label table data
- * 
  * init section
  * code
  * 
@@ -18,6 +14,8 @@
 /** Stack frame layout
  * 
  * parameters
+ * 
+ * number of parameters
  * 
  * return address
  * 
@@ -57,7 +55,10 @@ class Arcvm {
         enum instruction {
                 exit, ret, mov_register_value, mov_register_address, 
                 mov_register_register, mov_address_value, mov_address_address, mov_address_register, 
-                push_value, push_address, push_register, pop_register, pop_address,
+                push_value, push_value_float_32, push_value_float_64, push_value_1, push_value_signed_8,
+                push_value_signed_16, push_value_signed_32, push_value_signed_64,
+                push_value_unsigned_8, push_value_unsigned_16, push_value_unsigned_32, push_value_unsigned_64,
+                push_address, push_register, pop_register, pop_address,
                 addu, addu_register_register, adds, adds_register_register, subu, subu_register_register,
                 subs, subs_register_register, mulu, mulu_register_register, muls, muls_register_register,
                 divu, divu_register_register, divs, divs_register_register, modu, modu_register_register,
@@ -129,14 +130,24 @@ class Arcvm {
         constexpr inline bool jump(u8 address) {
             if(address >= size) //TODO fix this asap it is just a temporary solution and it doesn't even work
                 return false;
-            program_counter = static_cast<u64>(address);
+            // because the program counter is incremented after an instruction is executed
+            // the jump will be off by one address so it is adjusted here to work as expected
+            if(address == 0)
+                program_counter = 0xffffffffffffffff;
+            else
+                program_counter = static_cast<u64>(address)-1;
             return true;
         }
 
         constexpr inline bool jump(u64 address) {
             if(address >= size) //TODO fix this asap it is just a temporary solution and it doesn't even work
                 return false;
-            program_counter = address;
+            // because the program counter is incremented after an instruction is executed
+            // the jump will be off by one address so it is adjusted here to work as expected
+            if(address == 0)
+                program_counter = 0xffffffffffffffff;
+            else
+                program_counter = address-1;
             return true;
         }
 
