@@ -62,7 +62,9 @@ class Arcvm {
                 addu, addu_register_register, adds, adds_register_register, subu, subu_register_register,
                 subs, subs_register_register, mulu, mulu_register_register, muls, muls_register_register,
                 divu, divu_register_register, divs, divs_register_register, modu, modu_register_register,
-                mods, mods_register_register, jump_short, jump_long, call_short, call_long
+                mods, mods_register_register, andu, andu_register_register, ands, ands_register_register,
+                oru, oru_register_register, ors, ors_register_register,
+                jump_short, jump_long, jump_ifzero, jump_ifnzero, call_short, call_long
             };
 
         Arcvm();
@@ -116,8 +118,8 @@ class Arcvm {
          * return the register represented by the given byte
          * 
          */
-        constexpr inline Register toRegister(u8 reg_num) {
-            return registers[reg_num];
+        constexpr inline Register* toRegister(u8 reg_num) {
+            return &registers[reg_num];
         }
 
         /**
@@ -127,6 +129,9 @@ class Arcvm {
             return stack.size() - 1;
         }
 
+        /**
+         * jump to specified address
+         */
         constexpr inline bool jump(u8 address) {
             if(address >= size) //TODO fix this asap it is just a temporary solution and it doesn't even work
                 return false;
@@ -139,11 +144,19 @@ class Arcvm {
             return true;
         }
 
-        constexpr inline bool jump(u64 address) {
-            if(address >= size) //TODO fix this asap it is just a temporary solution and it doesn't even work
+        constexpr inline bool jump(u32 address) {
+            if(address >= size)
                 return false;
-            // because the program counter is incremented after an instruction is executed
-            // the jump will be off by one address so it is adjusted here to work as expected
+            if(address == 0)
+                program_counter = 0xffffffffffffffff;
+            else
+                program_counter = static_cast<u64>(address-1);
+            return true;
+        }
+
+        constexpr inline bool jump(u64 address) {
+            if(address >= size)
+                return false;
             if(address == 0)
                 program_counter = 0xffffffffffffffff;
             else

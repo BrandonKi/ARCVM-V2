@@ -162,8 +162,8 @@ void Arcvm::execute() {
             break;
         case instruction::push_register:
         {
-            u8 reg_num = *nextByte();
-            stack.push_back(registers[reg_num].x64);
+            Register *reg = toRegister(*nextByte());
+            stack.push_back(reg->x64);
             break;
         }
         case instruction::pop_register:
@@ -188,9 +188,9 @@ void Arcvm::execute() {
         }
         case instruction::addu_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
-            dest.x64 = dest.x64 + src.x64;
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            dest->x64 = dest->x64 + src->x64;
             break;
         }
 
@@ -205,10 +205,10 @@ void Arcvm::execute() {
         }
         case instruction::adds_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
             // add the two value as a signed integer then store as unsigned
-            dest.x64 = reinterpret<u64>(reinterpret<i64>(dest.x64) + reinterpret<i64>(src.x64));
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) + reinterpret<i64>(src->x64));
             
             break;
         }
@@ -223,10 +223,10 @@ void Arcvm::execute() {
         }
         case instruction::subu_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
 
-            dest.x64 = dest.x64 - src.x64;
+            dest->x64 = dest->x64 - src->x64;
             
             break;
         }
@@ -241,10 +241,10 @@ void Arcvm::execute() {
         }
         case instruction::subs_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
             // add the two value as a signed integer then store as unsigned
-            dest.x64 = reinterpret<u64>(reinterpret<i64>(dest.x64) - reinterpret<i64>(src.x64));
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) - reinterpret<i64>(src->x64));
             
             break;
         }
@@ -259,9 +259,9 @@ void Arcvm::execute() {
         }
         case instruction::mulu_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
-            dest.x64 = dest.x64 * src.x64;
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            dest->x64 = dest->x64 * src->x64;
             break;
         }
         case instruction::muls:
@@ -275,10 +275,10 @@ void Arcvm::execute() {
         }
         case instruction::muls_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
             // add the two value as a signed integer then store as unsigned
-            dest.x64 = reinterpret<u64>(reinterpret<i64>(dest.x64) * reinterpret<i64>(src.x64));
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) * reinterpret<i64>(src->x64));
             break;
         }
         case instruction::divu:
@@ -292,9 +292,9 @@ void Arcvm::execute() {
         }
         case instruction::divu_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
-            dest.x64 = dest.x64 / src.x64;
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            dest->x64 = dest->x64 / src->x64;
             break;
         }
         case instruction::divs:
@@ -308,10 +308,10 @@ void Arcvm::execute() {
         }
         case instruction::divs_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
             // add the two value as a signed integer then store as unsigned
-            dest.x64 = reinterpret<u64>(reinterpret<i64>(dest.x64) / reinterpret<i64>(src.x64));
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) / reinterpret<i64>(src->x64));
             break;
         }
         case instruction::modu:
@@ -325,9 +325,9 @@ void Arcvm::execute() {
         }
         case instruction::modu_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
-            dest.x64 = dest.x64 % src.x64;
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            dest->x64 = dest->x64 % src->x64;
             break;
         }
         case instruction::mods:
@@ -341,10 +341,76 @@ void Arcvm::execute() {
         }
         case instruction::mods_register_register:
         {
-            Register dest = toRegister(*nextByte());
-            Register src = toRegister(*nextByte());
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
             // add the two value as a signed integer then store as unsigned
-            dest.x64 = reinterpret<u64>(reinterpret<i64>(dest.x64) % reinterpret<i64>(src.x64));
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) % reinterpret<i64>(src->x64));
+            break;        
+        }
+        case instruction::andu:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 & op1);
+            break;
+        }
+        case instruction::andu_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            dest->x64 = dest->x64 & src->x64;
+            break;
+        }
+        case instruction::ands:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 & op1));
+            break;
+        }
+        case instruction::ands_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) & reinterpret<i64>(src->x64));
+            break;        
+        }
+        case instruction::oru:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 | op1);
+            break;
+        }
+        case instruction::oru_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            dest->x64 = dest->x64 | src->x64;
+            break;
+        }
+        case instruction::ors:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 | op1));
+            break;
+        }
+        case instruction::ors_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) | reinterpret<i64>(src->x64));
             break;        
         }
         case instruction::jump_short:
@@ -353,6 +419,18 @@ void Arcvm::execute() {
         }
         case instruction::jump_long:
         {
+            break;
+        }
+        case instruction::jump_ifzero:
+        {
+            if(stack.back() == 0)
+                jump(reinterpret<u8>(*nextByte()));
+            break;
+        }
+        case instruction::jump_ifnzero:
+        {
+            if(stack.back() != 0)
+                jump(reinterpret<u8>(*nextByte()));
             break;
         }
         case instruction::call_short:
@@ -372,6 +450,17 @@ void Arcvm::execute() {
         }
         case instruction::call_long:
         {
+            u32 jump_address = reinterpret<u32>(*nextByte());
+            u32 local_variable_space = *reinterpret<u32*>(nextByte());
+            program_counter += 3;
+            // old return address
+            stack.push_back(program_counter + 1);   // add one more to the program counter because we want jump to the next instruction when returning
+            // old base pointer
+            stack.push_back(base_pointer);
+            // the new base pointer is equal to the current stack pointer
+            base_pointer = stack_pointer();
+            stack.resize(stack.size() + local_variable_space, 0);
+            jump(jump_address);
             break;
         }
 
