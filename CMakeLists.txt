@@ -35,6 +35,18 @@ set_target_properties( test1
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
+add_executable(test2 tests/test2.cpp src/Arcvm.cpp)
+set_target_properties( test2
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+)
+
+add_executable(test3 tests/test3.cpp src/Arcvm.cpp)
+set_target_properties( test3
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+)
+
 # This mess of if statements is to get around a bug in the extension I'm using for the test UI
 # when cmake is run with -DFIX_TEST_UI_BUG=True then this manually finds the test binaries otherwise I let cmake handle that
 if(${FIX_TEST_UI_BUG})
@@ -49,7 +61,11 @@ if(${FIX_TEST_UI_BUG})
     endif()
     add_test(Test0 ${test_exe_path}/test0)
     add_test(Test1 ${test_exe_path}/test1)
+    add_test(Test2 ${test_exe_path}/test2)
+    add_test(Test3 ${test_exe_path}/test3)
 else()
     add_test(NAME Test0 COMMAND test0)
     add_test(NAME Test1 COMMAND test1)
+    add_test(NAME Test2 COMMAND test2)
+    add_test(NAME Test3 COMMAND test3)
 endif()
