@@ -634,9 +634,12 @@ void Arcvm::execute() {
         }
         case instruction::call_short:
         {
+            u8 num_of_params = reinterpret<u8>(*nextByte());
             u8 jump_address = reinterpret<u8>(*nextByte());
             u32 local_variable_space = *reinterpret<u32*>(nextByte());
             program_counter += 3;
+            // number of params
+            stack.push_back(num_of_params);
             // old return address
             stack.push_back(program_counter + 1);   // add one more to the program counter because we want jump to the next instruction when returning
             // old base pointer
@@ -649,9 +652,12 @@ void Arcvm::execute() {
         }
         case instruction::call_long:
         {
+            u8 num_of_params = reinterpret<u8>(*nextByte());
             u32 jump_address = reinterpret<u32>(*nextByte());
             u32 local_variable_space = *reinterpret<u32*>(nextByte());
             program_counter += 3;
+            // number of params
+            stack.push_back(num_of_params);
             // old return address
             stack.push_back(program_counter + 1);   // add one more to the program counter because we want jump to the next instruction when returning
             // old base pointer
@@ -660,6 +666,11 @@ void Arcvm::execute() {
             base_pointer = stack_pointer();
             stack.resize(stack.size() + local_variable_space, 0);
             jump(jump_address);
+            break;
+        }
+        case instruction::push_param:
+        {
+            stack.push_back(stack[base_pointer - (3 + *nextByte())]);
             break;
         }
 

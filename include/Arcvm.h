@@ -70,7 +70,8 @@ class Arcvm {
                 gtequalu, gtequalu_register_register, gtequals, gtequals_register_register, 
                 ltu, ltu_register_register, lts, lts_register_register, 
                 ltequalu, ltequalu_register_register, ltequals, ltequals_register_register, 
-                jump_short, jump_long, jump_ifzero, jump_ifnzero, call_short, call_long
+                jump_short, jump_long, jump_ifzero, jump_ifnzero, call_short, call_long,
+                push_param,
             };
 
         Arcvm();
