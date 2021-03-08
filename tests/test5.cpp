@@ -20,27 +20,19 @@ int main(int, char**) {
         vm::exit,
 
         // code section
-        vm::push_value,
+        vm::push_value_unsigned_8,
         0x64,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        vm::push_value,
+        vm::push_value_unsigned_8,
         0x64,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        vm::addu,
+        vm::equalu,
+        vm::push_value_unsigned_8,
+        0x64,
+        vm::push_value_unsigned_8,
+        0x64,
+        vm::equalu,
+        vm::equalu,
         vm::ret
     };
-    expect<u32>(200);
+    expect<u32>(1);
     return runTest(program);
 }

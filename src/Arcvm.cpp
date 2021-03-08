@@ -39,6 +39,7 @@ void Arcvm::execute() {
         case instruction::exit:
         {
             exit_code = reinterpret<i32>(static_cast<u32>(stack.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
+            
             // set the program counter equal to the max value so the program ends
             // I should probably change this in the future
             program_counter = size;                     
@@ -412,6 +413,72 @@ void Arcvm::execute() {
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) | reinterpret<i64>(src->x64));
             break;        
+        }
+        case instruction::equalu:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 == op1);
+            break;
+        }
+        case instruction::equalu_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            stack.push_back(dest->x64 == src->x64);
+            break;
+        }
+        case instruction::equals:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 == op1));
+            break;
+        }
+        case instruction::equals_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            stack.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) == reinterpret<i64>(src->x64)));
+            break;        
+        }
+        case instruction::not_equalu:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 != op1);
+            break;
+        }
+        case instruction::not_equalu_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            stack.push_back(dest->x64 != src->x64);
+            break;
+        }
+        case instruction::not_equals:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 != op1));
+            break;
+        }
+        case instruction::not_equals_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            stack.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) != reinterpret<i64>(src->x64)));
+            break;
         }
         case instruction::jump_short:
         {

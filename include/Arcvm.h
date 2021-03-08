@@ -63,7 +63,9 @@ class Arcvm {
                 subs, subs_register_register, mulu, mulu_register_register, muls, muls_register_register,
                 divu, divu_register_register, divs, divs_register_register, modu, modu_register_register,
                 mods, mods_register_register, andu, andu_register_register, ands, ands_register_register,
-                oru, oru_register_register, ors, ors_register_register,
+                oru, oru_register_register, ors, ors_register_register, 
+                equalu, equalu_register_register, equals, equals_register_register,
+                not_equalu, not_equalu_register_register, not_equals, not_equals_register_register,
                 jump_short, jump_long, jump_ifzero, jump_ifnzero, call_short, call_long
             };
 
