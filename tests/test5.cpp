@@ -1,7 +1,7 @@
 #include "test.h"
 
 /**
- * push two unsigned 64 bit values to the stack and add them
+ * test equality instructions
  */
 int main(int, char**) {
     
@@ -12,7 +12,8 @@ int main(int, char**) {
         vm::push_value_unsigned_8,
         0x00,
         vm::call_short,
-        0x09,
+        0x00,
+        0x0a,
         0x00,
         0x00,
         0x00,
