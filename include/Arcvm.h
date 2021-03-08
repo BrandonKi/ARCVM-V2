@@ -66,6 +66,10 @@ class Arcvm {
                 oru, oru_register_register, ors, ors_register_register, 
                 equalu, equalu_register_register, equals, equals_register_register,
                 not_equalu, not_equalu_register_register, not_equals, not_equals_register_register,
+                gtu, gtu_register_register, gts, gts_register_register, 
+                gtequalu, gtequalu_register_register, gtequals, gtequals_register_register, 
+                ltu, ltu_register_register, lts, lts_register_register, 
+                ltequalu, ltequalu_register_register, ltequals, ltequals_register_register, 
                 jump_short, jump_long, jump_ifzero, jump_ifnzero, call_short, call_long
             };
 

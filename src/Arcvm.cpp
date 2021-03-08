@@ -480,6 +480,138 @@ void Arcvm::execute() {
             stack.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) != reinterpret<i64>(src->x64)));
             break;
         }
+        case instruction::gtu:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 > op1);
+            break;
+        }
+        case instruction::gtu_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            stack.push_back(dest->x64 > src->x64);
+            break;
+        }
+        case instruction::gts:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 > op1));
+            break;
+        }
+        case instruction::gts_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            stack.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) > reinterpret<i64>(src->x64)));
+            break;
+        }
+        case instruction::gtequalu:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 >= op1);
+            break;
+        }
+        case instruction::gtequalu_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            stack.push_back(dest->x64 >= src->x64);
+            break;
+        }
+        case instruction::gtequals:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 >= op1));
+            break;
+        }
+        case instruction::gtequals_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            stack.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) >= reinterpret<i64>(src->x64)));
+            break;
+        }
+        case instruction::ltu:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 < op1);
+            break;
+        }
+        case instruction::ltu_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            stack.push_back(dest->x64 < src->x64);
+            break;
+        }
+        case instruction::lts:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 < op1));
+            break;
+        }
+        case instruction::lts_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            stack.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) < reinterpret<i64>(src->x64)));
+            break;
+        }
+        case instruction::ltequalu:
+        {
+            u64 op1 = stack.back();
+            stack.pop_back();
+            u64 op2 = stack.back();
+            stack.pop_back();
+            stack.push_back(op2 <= op1);
+            break;
+        }
+        case instruction::ltequalu_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            stack.push_back(dest->x64 <= src->x64);
+            break;
+        }
+        case instruction::ltequals:
+        {
+            i64 op1 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            i64 op2 = reinterpret<i64>(stack.back());
+            stack.pop_back();
+            stack.push_back(reinterpret<u64>(op2 <= op1));
+            break;
+        }
+        case instruction::ltequals_register_register:
+        {
+            Register *dest = toRegister(*nextByte());
+            Register *src = toRegister(*nextByte());
+            // add the two value as a signed integer then store as unsigned
+            stack.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) <= reinterpret<i64>(src->x64)));
+            break;
+        }
         case instruction::jump_short:
         {
             break;
