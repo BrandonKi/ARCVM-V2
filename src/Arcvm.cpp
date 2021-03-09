@@ -624,12 +624,16 @@ void Arcvm::execute() {
         {
             if(stack.back() == 0)
                 jump(reinterpret<u8>(*nextByte()));
+            else
+                nextByte();
             break;
         }
         case instruction::jump_ifnzero:
         {
             if(stack.back() != 0)
                 jump(reinterpret<u8>(*nextByte()));
+            else
+                nextByte();
             break;
         }
         case instruction::call_short:
