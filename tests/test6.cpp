@@ -1,7 +1,7 @@
 #include "test.h"
 
 /**
- * test local variables
+ * test passing parameters
  */
 int main(int, char**) {
     
