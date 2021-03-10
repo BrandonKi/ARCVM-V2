@@ -12,7 +12,7 @@ int main(int, char**) {
         vm::push_value_unsigned_8,
         0x00,
         vm::push_value_unsigned_8,
-        0x23,
+        0x28,
         vm::call_short,
         0x01,
         0x0c,
