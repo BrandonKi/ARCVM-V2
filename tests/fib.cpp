@@ -67,6 +67,7 @@ int main(int, char**) {
     return VM.run();
 }
 
+// equivalent implementation in python
 // def recur_fibo(n):
 //    if n <= 1:
 //        return n
