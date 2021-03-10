@@ -614,10 +614,12 @@ void Arcvm::execute() {
         }
         case instruction::jump_short:
         {
+            jump(reinterpret<u8>(*nextByte()));
             break;
         }
         case instruction::jump_long:
         {
+            jump(reinterpret<u8>(*reinterpret<u32*>(nextByte())));
             break;
         }
         case instruction::jump_ifzero:
@@ -672,7 +674,7 @@ void Arcvm::execute() {
             jump(jump_address);
             break;
         }
-        case instruction::push_param:
+        case instruction::load_arg:
         {
             stack.push_back(stack[base_pointer - (3 + *nextByte())]);
             break;

@@ -12,7 +12,7 @@ int main(int, char**) {
         vm::push_value_unsigned_8,
         0x00,
         vm::push_value_unsigned_8,
-        0x0a,
+        0x23,
         vm::call_short,
         0x01,
         0x0c,
@@ -23,17 +23,17 @@ int main(int, char**) {
         vm::exit,
 
         // code section
-        vm::push_param,
+        vm::load_arg,
         0x00,
         vm::push_value_unsigned_8,
         0x01,
         vm::gtu,
         vm::jump_ifnzero,
         0x16,
-        vm::push_param,
+        vm::load_arg,
         0x00,
         vm::ret,
-        vm::push_param,
+        vm::load_arg,
         0x00,
         vm::push_value_unsigned_8,
         0x01,
@@ -45,7 +45,7 @@ int main(int, char**) {
         0x00,
         0x00,
         0x00,
-        vm::push_param,
+        vm::load_arg,
         0x00,
         vm::push_value_unsigned_8,
         0x02,
@@ -60,8 +60,11 @@ int main(int, char**) {
         vm::addu,
         vm::ret,
     };
-    expect<u32>(55);
-    return runTest(program);
+    expect<u32>(610);
+    // return runTest(program);
+    Arcvm VM;
+    VM.loadProgram(reinterpret_cast<char*>(program.data()), program.size());
+    return VM.run();
 }
 
 // def recur_fibo(n):

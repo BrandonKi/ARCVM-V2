@@ -37,7 +37,7 @@ int main(int, char**) {
 
         // add one to the parameter
         // function(unsigned int) -> unsigned int
-        vm::push_param,
+        vm::load_arg,
         0x00,
         vm::push_value_unsigned_8,
         0x01,

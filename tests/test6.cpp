@@ -25,9 +25,9 @@ int main(int, char**) {
         vm::exit,
 
         // code section
-        vm::push_param,
+        vm::load_arg,
         0x00,
-        vm::push_param,
+        vm::load_arg,
         0x01,
         vm::addu,
         vm::ret
