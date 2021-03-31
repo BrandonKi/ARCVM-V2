@@ -12,7 +12,7 @@ int main(int, char**) {
         vm::push_value_unsigned_8,
         0x00,
         vm::push_value_unsigned_8,
-        0x28,
+        0x0a,
         vm::call_short,
         0x01,
         0x0c,
@@ -60,11 +60,8 @@ int main(int, char**) {
         vm::addu,
         vm::ret,
     };
-    expect<u32>(610);
-    // return runTest(program);
-    Arcvm VM;
-    VM.loadProgram(reinterpret_cast<char*>(program.data()), program.size());
-    return VM.run();
+    expect<u32>(55);
+    return runTest(program);
 }
 
 // equivalent implementation in python

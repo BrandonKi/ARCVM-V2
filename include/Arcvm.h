@@ -153,7 +153,7 @@ class Arcvm {
 
                 call_short,
                 call_long,
-                
+
                 load_arg,
             };
 
@@ -166,7 +166,7 @@ class Arcvm {
         u64 program_counter;
         u64 base_pointer;
 
-        Register registers[16] = {0};
+        Register registers[16] = {{0}};
         std::vector<u64> stack;
         u8* heap;
 
