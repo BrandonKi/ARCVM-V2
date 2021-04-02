@@ -19,7 +19,7 @@ int main(const int argc, const char** argv) {
     input_file.read(buffer, size);
     input_file.close();
     Arcvm vm;
-    if(vm.load_program(buffer, size) == false)  // will need to pass args in some way also
+    if(!vm.load_program(buffer, size))  // will need to pass args in some way also
         std::cout << "ERROR FILE FORMAT UNSUPPORTED" << std::endl;
     else
         vm.run();

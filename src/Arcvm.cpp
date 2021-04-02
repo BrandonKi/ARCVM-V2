@@ -10,18 +10,19 @@ Arcvm::~Arcvm() {
     free(heap_);
 }
 
-bool Arcvm::load_program(char* program, size_t size) {
+bool Arcvm::load_program(char* program, const size_t size) {
     this->program_ = reinterpret<u8*>(program);
     this->size_ = size;
-    if(verifySignature() == false)
+    if(!verifySignature())
         return false;
     return true;
 }
 
 inline bool Arcvm::verifySignature() {
     const char* signature = "\xfa\xca\xde";
-    program_ += 3;
-    return memcmp(signature, program_ - 3, 3) == 0;
+    const int sig_len = 3;
+    program_ += sig_len;
+    return memcmp(signature, program_ - sig_len, sig_len) == 0;
 }
 
 i32 Arcvm::run() {
@@ -163,7 +164,7 @@ void Arcvm::execute() {
             break;
         case instruction::push_register:
         {
-            auto *reg = to_register(*next_byte());
+            Register *reg = to_register(*next_byte());
             stack_.push_back(reg->x64);
             break;
         }
@@ -189,8 +190,8 @@ void Arcvm::execute() {
         }
         case instruction::addu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             dest->x64 = dest->x64 + src->x64;
             break;
         }
@@ -206,8 +207,8 @@ void Arcvm::execute() {
         }
         case instruction::adds_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) + reinterpret<i64>(src->x64));
             
@@ -224,8 +225,8 @@ void Arcvm::execute() {
         }
         case instruction::subu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
 
             dest->x64 = dest->x64 - src->x64;
             
@@ -242,8 +243,8 @@ void Arcvm::execute() {
         }
         case instruction::subs_register_register:
         {
-            auto*dest = to_register(*next_byte());
-            auto*src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) - reinterpret<i64>(src->x64));
             
@@ -260,8 +261,8 @@ void Arcvm::execute() {
         }
         case instruction::mulu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             dest->x64 = dest->x64 * src->x64;
             break;
         }
@@ -276,8 +277,8 @@ void Arcvm::execute() {
         }
         case instruction::muls_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) * reinterpret<i64>(src->x64));
             break;
@@ -293,8 +294,8 @@ void Arcvm::execute() {
         }
         case instruction::divu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             dest->x64 = dest->x64 / src->x64;
             break;
         }
@@ -309,8 +310,8 @@ void Arcvm::execute() {
         }
         case instruction::divs_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) / reinterpret<i64>(src->x64));
             break;
@@ -326,8 +327,8 @@ void Arcvm::execute() {
         }
         case instruction::modu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             dest->x64 = dest->x64 % src->x64;
             break;
         }
@@ -342,8 +343,8 @@ void Arcvm::execute() {
         }
         case instruction::mods_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) % reinterpret<i64>(src->x64));
             break;        
@@ -359,8 +360,8 @@ void Arcvm::execute() {
         }
         case instruction::andu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             dest->x64 = dest->x64 & src->x64;
             break;
         }
@@ -375,8 +376,8 @@ void Arcvm::execute() {
         }
         case instruction::ands_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) & reinterpret<i64>(src->x64));
             break;        
@@ -392,8 +393,8 @@ void Arcvm::execute() {
         }
         case instruction::oru_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             dest->x64 = dest->x64 | src->x64;
             break;
         }
@@ -408,8 +409,8 @@ void Arcvm::execute() {
         }
         case instruction::ors_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) | reinterpret<i64>(src->x64));
             break;        
@@ -425,8 +426,8 @@ void Arcvm::execute() {
         }
         case instruction::equalu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             stack_.push_back(dest->x64 == src->x64);
             break;
         }
@@ -441,8 +442,8 @@ void Arcvm::execute() {
         }
         case instruction::equals_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) == reinterpret<i64>(src->x64)));
             break;        
@@ -458,8 +459,8 @@ void Arcvm::execute() {
         }
         case instruction::not_equalu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             stack_.push_back(dest->x64 != src->x64);
             break;
         }
@@ -474,8 +475,8 @@ void Arcvm::execute() {
         }
         case instruction::not_equals_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) != reinterpret<i64>(src->x64)));
             break;
@@ -491,8 +492,8 @@ void Arcvm::execute() {
         }
         case instruction::gtu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             stack_.push_back(dest->x64 > src->x64);
             break;
         }
@@ -507,8 +508,8 @@ void Arcvm::execute() {
         }
         case instruction::gts_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) > reinterpret<i64>(src->x64)));
             break;
@@ -524,8 +525,8 @@ void Arcvm::execute() {
         }
         case instruction::gtequalu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             stack_.push_back(dest->x64 >= src->x64);
             break;
         }
@@ -540,8 +541,8 @@ void Arcvm::execute() {
         }
         case instruction::gtequals_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) >= reinterpret<i64>(src->x64)));
             break;
@@ -557,8 +558,8 @@ void Arcvm::execute() {
         }
         case instruction::ltu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             stack_.push_back(dest->x64 < src->x64);
             break;
         }
@@ -573,8 +574,8 @@ void Arcvm::execute() {
         }
         case instruction::lts_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) < reinterpret<i64>(src->x64)));
             break;
@@ -590,8 +591,8 @@ void Arcvm::execute() {
         }
         case instruction::ltequalu_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             stack_.push_back(dest->x64 <= src->x64);
             break;
         }
@@ -606,8 +607,8 @@ void Arcvm::execute() {
         }
         case instruction::ltequals_register_register:
         {
-            auto *dest = to_register(*next_byte());
-            auto *src = to_register(*next_byte());
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) <= reinterpret<i64>(src->x64)));
             break;
