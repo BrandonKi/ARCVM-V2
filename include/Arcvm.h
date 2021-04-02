@@ -163,7 +163,7 @@ class Arcvm {
         Arcvm(Arcvm&&) = default;
         Arcvm& operator = (const Arcvm&) = default;
         Arcvm& operator = (Arcvm&&) = default;
-        bool load_program(char*, size_t);
+        bool load_program(char*, const size_t);
         i32 run();
 
     private:
@@ -261,21 +261,3 @@ class Arcvm {
 };
 
 #endif
-
-/*
-push_value_float_32 
-push_value_float_64 
-
-push_value_signed_1
-push_value_signed_8
-push_value_signed_16
-push_value_signed_32
-push_value_signed_64
-
-push_value_unsigned_1
-push_value_unsigned_8
-push_value_unsigned_16
-push_value_unsigned_32
-push_value_unsigned_64
-
-*/
