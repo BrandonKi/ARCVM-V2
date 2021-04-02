@@ -39,7 +39,8 @@ void Arcvm::execute() {
     switch (program_[program_counter_]) {
         case instruction::exit:
         {
-            exit_code_ = reinterpret<i32>(static_cast<u32>(stack_.back()));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
+            
+            exit_code_ = reinterpret<i32>(static_cast<u32>(stack_.back() & 0x00000000ffffffff));   //FIXME this is just temporary so tests will pass and because the stack frame and functions aren't implemented yet
             
             // set the program counter equal to the max value so the program ends
             // I should probably change this in the future
@@ -86,9 +87,9 @@ void Arcvm::execute() {
             stack_.push_back(value);
             break;
         }
-        case push_value_float_32:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        case push_value_float_32:
         {
-            auto value = *reinterpret<f32*>(next_byte());
+            auto value = static_cast<f64>(*reinterpret<f32*>(next_byte()));
             program_counter_ += 3; // move forwards 3 bytes to get past the immediate value
             stack_.push_back(reinterpret<u64>(value));
             break;
@@ -106,22 +107,22 @@ void Arcvm::execute() {
             stack_.push_back(static_cast<u64>(value));
             break;
         }
-        case push_value_signed_8:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        case push_value_signed_8:
         {
-            auto value = reinterpret<i8>(*next_byte());
+            auto value = static_cast<i64>(reinterpret<i8>(*next_byte()));
             stack_.push_back(reinterpret<u64>(value));
             break;
         }
-        case push_value_signed_16:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        case push_value_signed_16:
         {
-            auto value = *reinterpret<i16*>(next_byte());
+            auto value = static_cast<i64>(*reinterpret<i16*>(next_byte()));
             ++program_counter_; // move forwards 1 byte to get past the immediate value
             stack_.push_back(reinterpret<u64>(value));
             break;
         }
-        case push_value_signed_32:   //TODO THIS DOES NOT EVEN COME CLOSE TO WORKING
+        case push_value_signed_32:
         {
-            auto value = *reinterpret<i32*>(next_byte());
+            auto value = static_cast<i64>(*reinterpret<i32*>(next_byte()));
             program_counter_ += 3; // move forwards 3 bytes to get past the immediate value
             stack_.push_back(reinterpret<u64>(value));
             break;
@@ -210,8 +211,24 @@ void Arcvm::execute() {
             Register *dest = to_register(*next_byte());
             Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) + reinterpret<i64>(src->x64));
-            
+            dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) + reinterpret<i64>(src->x64));     
+            break;
+        }
+        case instruction::addf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 + op1));
+            break;
+        }
+        case instruction::addf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            dest->x64 = reinterpret<u64>(reinterpret<f64>(dest->x64) + reinterpret<f64>(src->x64));  
             break;
         }
         case instruction::subu:
@@ -247,7 +264,23 @@ void Arcvm::execute() {
             Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) - reinterpret<i64>(src->x64));
-            
+            break;
+        }
+        case instruction::subf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 - op1));
+            break;
+        }
+        case instruction::subf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            dest->x64 = reinterpret<u64>(reinterpret<f64>(dest->x64) - reinterpret<f64>(src->x64));
             break;
         }
         case instruction::mulu:
@@ -283,6 +316,23 @@ void Arcvm::execute() {
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) * reinterpret<i64>(src->x64));
             break;
         }
+        case instruction::mulf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 * op1));
+            break;
+        }
+        case instruction::mulf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            dest->x64 = reinterpret<u64>(reinterpret<f64>(dest->x64) * reinterpret<f64>(src->x64));
+            break;
+        }
         case instruction::divu:
         {
             auto op1 = stack_.back();
@@ -314,6 +364,23 @@ void Arcvm::execute() {
             Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             dest->x64 = reinterpret<u64>(reinterpret<i64>(dest->x64) / reinterpret<i64>(src->x64));
+            break;
+        }
+        case instruction::divf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 / op1));
+            break;
+        }
+        case instruction::divf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            dest->x64 = reinterpret<u64>(reinterpret<f64>(dest->x64) / reinterpret<f64>(src->x64));
             break;
         }
         case instruction::modu:
@@ -448,6 +515,23 @@ void Arcvm::execute() {
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) == reinterpret<i64>(src->x64)));
             break;        
         }
+        case instruction::equalf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 == op1));
+            break;
+        }
+        case instruction::equalf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) == reinterpret<f64>(src->x64)));
+            break;        
+        }
         case instruction::not_equalu:
         {
             auto op1 = stack_.back();
@@ -479,6 +563,23 @@ void Arcvm::execute() {
             Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) != reinterpret<i64>(src->x64)));
+            break;
+        }
+        case instruction::not_equalf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 != op1));
+            break;
+        }
+        case instruction::not_equalf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) != reinterpret<f64>(src->x64)));
             break;
         }
         case instruction::gtu:
@@ -514,6 +615,23 @@ void Arcvm::execute() {
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) > reinterpret<i64>(src->x64)));
             break;
         }
+        case instruction::gtf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 > op1));
+            break;
+        }
+        case instruction::gtf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) > reinterpret<f64>(src->x64)));
+            break;
+        }
         case instruction::gtequalu:
         {
             auto op1 = stack_.back();
@@ -545,6 +663,23 @@ void Arcvm::execute() {
             Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) >= reinterpret<i64>(src->x64)));
+            break;
+        }
+        case instruction::gtequalf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 >= op1));
+            break;
+        }
+        case instruction::gtequalf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) >= reinterpret<f64>(src->x64)));
             break;
         }
         case instruction::ltu:
@@ -580,6 +715,23 @@ void Arcvm::execute() {
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) < reinterpret<i64>(src->x64)));
             break;
         }
+        case instruction::ltf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 < op1));
+            break;
+        }
+        case instruction::ltf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) < reinterpret<f64>(src->x64)));
+            break;
+        }
         case instruction::ltequalu:
         {
             auto op1 = stack_.back();
@@ -611,6 +763,23 @@ void Arcvm::execute() {
             Register *src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
             stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) <= reinterpret<i64>(src->x64)));
+            break;
+        }
+        case instruction::ltequalf:
+        {
+            auto op1 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            auto op2 = reinterpret<f64>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(op2 <= op1));
+            break;
+        }
+        case instruction::ltequalf_register_register:
+        {
+            Register *dest = to_register(*next_byte());
+            Register *src = to_register(*next_byte());
+            // add the two value as a signed integer then store as unsigned
+            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) <= reinterpret<f64>(src->x64)));
             break;
         }
         case instruction::jump_short:

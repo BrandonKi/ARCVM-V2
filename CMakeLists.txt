@@ -71,12 +71,25 @@ set_target_properties( test7
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
+add_executable(test8 tests/test8.cpp src/Arcvm.cpp)
+set_target_properties( test8
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+)
+
+add_executable(test9 tests/test9.cpp src/Arcvm.cpp)
+set_target_properties( test9
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+)
+
 add_executable(fib tests/fib.cpp src/Arcvm.cpp)
 set_target_properties( fib
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
-# This mess of if statements is to get around a bug in the extension I'm using for the test UI
+
+# This mess of if statements is to get around a bug in the VSCode extension I'm using for the test UI
 # when cmake is run with -DFIX_TEST_UI_BUG=True then this manually finds the test binaries otherwise I let cmake handle that
 if(${FIX_TEST_UI_BUG})
     if(CMAKE_CXX_COMPILER_ID EQUAL "MSVC")
@@ -96,6 +109,8 @@ if(${FIX_TEST_UI_BUG})
     add_test(Test5 ${test_exe_path}/test5)
     add_test(Test6 ${test_exe_path}/test6)
     add_test(Test7 ${test_exe_path}/test7)
+    add_test(Test8 ${test_exe_path}/test8)
+    add_test(Test9 ${test_exe_path}/test9)
     add_test(fib ${test_exe_path}/fib)
 else()
     add_test(NAME Test0 COMMAND test0)
@@ -105,5 +120,8 @@ else()
     add_test(NAME Test4 COMMAND test4)
     add_test(NAME Test5 COMMAND test5)
     add_test(NAME Test6 COMMAND test6)
+    add_test(NAME Test7 COMMAND test7)
+    add_test(NAME Test8 COMMAND test8)
+    add_test(NAME Test9 COMMAND test9)
     add_test(NAME fib COMMAND fib)
 endif()
