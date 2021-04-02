@@ -2,3 +2,8 @@
 /bin
 /Testing
 /tests/bin
+
+# IDE directories
+/.vs
+/cmake-build-debug
+/out
