@@ -159,21 +159,25 @@ class Arcvm {
 
         Arcvm();
         ~Arcvm();
-        bool loadProgram(char*, size_t);
+        Arcvm(Arcvm&) = default;
+        Arcvm(Arcvm&&) = default;
+        Arcvm& operator = (const Arcvm&) = default;
+        Arcvm& operator = (Arcvm&&) = default;
+        bool load_program(char*, size_t);
         i32 run();
 
     private:
-        u64 program_counter;
-        u64 base_pointer;
+        u64 program_counter_;
+        u64 base_pointer_;
 
-        Register registers[16] = {{0}};
-        std::vector<u64> stack;
-        u8* heap;
+        Register registers_[16] = {{0}};
+        std::vector<u64> stack_;
+        u8* heap_;
 
-        u8 *program;
-        size_t size;
+        u8 *program_;
+        size_t size_;
 
-        i32 exit_code;
+        i32 exit_code_;
 
     
         bool verifySignature();
@@ -190,67 +194,67 @@ class Arcvm {
         }
 
         /**
-         * return a pointer to the currnet byte in the program 
+         * return a pointer to the current byte in the program 
          */
-        constexpr inline u8 *currentByte() {
-            return &program[program_counter];
+        constexpr inline u8 *current_byte() const noexcept {
+            return &program_[program_counter_];
         }
 
         /**
          * return a pointer to the next byte in the program 
          * and increment the program counter accordingly
          */
-        constexpr inline u8 *nextByte() {
-            return &program[++program_counter];
+        constexpr inline u8 *next_byte() noexcept {
+            return &program_[++program_counter_];
         }
 
         /**
          * return the register represented by the given byte
          * 
          */
-        constexpr inline Register* toRegister(u8 reg_num) {
-            return &registers[reg_num];
+        constexpr inline Register* to_register(const u8 reg_num) noexcept {
+            return &registers_[reg_num];
         }
 
         /**
          * return the current stack pointer
          */
-        inline u64 stack_pointer() {
-            return stack.size() - 1;
+        inline u64 stack_pointer() const noexcept {
+            return stack_.size() - 1;
         }
 
         /**
          * jump to specified address
          */
-        constexpr inline bool jump(u8 address) {
-            if(address >= size) //TODO fix this asap it is just a temporary solution and it doesn't even work
+        constexpr inline bool jump(const u8 address) noexcept {
+            if(address >= size_) //TODO fix this asap it is just a temporary solution and it doesn't even work
                 return false;
             // because the program counter is incremented after an instruction is executed
             // the jump will be off by one address so it is adjusted here to work as expected
             if(address == 0)
-                program_counter = 0xffffffffffffffff;
+                program_counter_ = 0xffffffffffffffff;
             else
-                program_counter = static_cast<u64>(address)-1;
+                program_counter_ = static_cast<u64>(address)-1;
             return true;
         }
 
-        constexpr inline bool jump(u32 address) {
-            if(address >= size)
+        constexpr inline bool jump(const u32 address) noexcept {
+            if(address >= size_)
                 return false;
             if(address == 0)
-                program_counter = 0xffffffffffffffff;
+                program_counter_ = 0xffffffffffffffff;
             else
-                program_counter = static_cast<u64>(address-1);
+                program_counter_ = static_cast<u64>(address-1);
             return true;
         }
 
-        constexpr inline bool jump(u64 address) {
-            if(address >= size)
+        constexpr inline bool jump(const u64 address) noexcept {
+            if(address >= size_)
                 return false;
             if(address == 0)
-                program_counter = 0xffffffffffffffff;
+                program_counter_ = 0xffffffffffffffff;
             else
-                program_counter = address-1;
+                program_counter_ = address-1;
             return true;
         }
 

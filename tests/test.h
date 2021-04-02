@@ -22,7 +22,7 @@ void expect(T result) {
 
 i32 runTest(std::vector<u8> program) {
     Arcvm VM;
-    if(VM.loadProgram(reinterpret_cast<char*>(program.data()), program.size()) == false)
+    if(VM.load_program(reinterpret_cast<char*>(program.data()), program.size()) == false)
         return -1;
     return VM.run() == expected_result ? 0 : 1;
 }
