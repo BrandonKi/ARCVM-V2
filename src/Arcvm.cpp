@@ -782,6 +782,12 @@ void Arcvm::execute() {
             stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) <= reinterpret<f64>(src->x64)));
             break;
         }
+        case instruction::push_string:
+        {
+            // length = 32 bit unsigned immediate
+            // then there is {length} chars after
+            // maybe just store it in a std::string to make things easier
+        }
         case instruction::jump_short:
         {
             jump(reinterpret<u8>(*next_byte()));

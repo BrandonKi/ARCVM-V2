@@ -166,6 +166,8 @@ class Arcvm {
                 ltequalf,
                 ltequalf_register_register,
 
+                push_string,
+
                 jump_short,
                 jump_long,
                 jump_ifzero,
