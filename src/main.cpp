@@ -22,7 +22,7 @@ int main(const int argc, const char** argv) {
     if(!vm.load_program(buffer, size))  // will need to pass args in some way also
         std::cout << "ERROR FILE FORMAT UNSUPPORTED" << std::endl;
     else
-        vm.run();
+        return vm.run();
 }
 
 std::string parse_args(const int argc, const char** argv) {
