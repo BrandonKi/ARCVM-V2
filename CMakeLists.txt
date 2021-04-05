@@ -5,9 +5,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests)
 
 cmake_policy(SET CMP0054 NEW)
 
-set(sources 
+set(arcvm_sources
     src/main.cpp
     src/ARCVM.cpp
+    PARENT_SCOPE
 )
 
 add_executable(ARCVM-V2 ${sources})
