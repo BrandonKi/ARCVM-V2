@@ -2,15 +2,26 @@
 
 The second version of ARCVM with a new instruction set
 
+ARCVM is a mix between a stack-based and register-based virtual machine.
+I supports operations that can be done directly on stack as well as operations between registers.
+Internally all types are stored as 64 bits and it is up to the user to respect the type system and use correct operations according to type.
+
+## Build/Usage
+Uses the Ninja build system as an example
+```
+git clone https://github.com/BrandonKi/ARCVM-V2.git
+cd ARCVM-V2
+mkdir build
+cd build
+cmake .. -G Ninja
+ninja ARCVM-V2
+cd ../bin
+./ARCVM-V2 <filename>
+```
 
 TODO list
-* add description
-* setup section explaining how to build and use
-* add link to intruction set
-* conditional jumps
 * heap
-* string
-* arrays
+* finish arrays
 * calling C functions
 * C FFI
 
