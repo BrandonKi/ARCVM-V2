@@ -3,7 +3,7 @@
 The second version of ARCVM with a new instruction set
 
 ARCVM is a mix between a stack-based and register-based virtual machine.
-I supports operations that can be done directly on stack as well as operations between registers.
+It supports operations that can be done directly on stack as well as operations between registers.
 Internally all types are stored as 64 bits and it is up to the user to respect the type system and use correct operations according to type.
 
 ## Build/Usage
