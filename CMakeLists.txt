@@ -5,9 +5,11 @@ include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests)
 
 cmake_policy(SET CMP0054 NEW)
 
+add_library(arcvm OBJECT src/ARCVM.cpp)
+
 set(sources
     src/main.cpp
-    src/ARCVM.cpp
+    $<TARGET_OBJECTS:arcvm>
 )
 
 add_executable(ARCVM-V2 ${sources})
@@ -23,67 +25,73 @@ enable_testing()
 set(test_bin_dir ${CMAKE_SOURCE_DIR}/tests/bin)
 
 
-add_executable(test0 tests/test0.cpp src/Arcvm.cpp)
+add_executable(test0 tests/test0.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test0
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test1 tests/test1.cpp src/Arcvm.cpp)
+add_executable(test1 tests/test1.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test1
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test2 tests/test2.cpp src/Arcvm.cpp)
+add_executable(test2 tests/test2.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test2
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test3 tests/test3.cpp src/Arcvm.cpp)
+add_executable(test3 tests/test3.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test3
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test4 tests/test4.cpp src/Arcvm.cpp)
+add_executable(test4 tests/test4.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test4
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test5 tests/test5.cpp src/Arcvm.cpp)
+add_executable(test5 tests/test5.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test5
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test6 tests/test6.cpp src/Arcvm.cpp)
+add_executable(test6 tests/test6.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test6
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test7 tests/test7.cpp src/Arcvm.cpp)
+add_executable(test7 tests/test7.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test7
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test8 tests/test8.cpp src/Arcvm.cpp)
+add_executable(test8 tests/test8.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test8
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(test9 tests/test9.cpp src/Arcvm.cpp)
+add_executable(test9 tests/test9.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( test9
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
-add_executable(fib tests/fib.cpp src/Arcvm.cpp)
+add_executable(test10 tests/test10.cpp $<TARGET_OBJECTS:arcvm>)
+set_target_properties( test10
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+)
+
+add_executable(fib tests/fib.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( fib
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
@@ -111,6 +119,7 @@ if(${FIX_TEST_UI_BUG})
     add_test(Test7 ${test_exe_path}/test7)
     add_test(Test8 ${test_exe_path}/test8)
     add_test(Test9 ${test_exe_path}/test9)
+    add_test(Test10 ${test_exe_path}/test10)
     add_test(fib ${test_exe_path}/fib)
 else()
     add_test(NAME Test0 COMMAND test0)
@@ -123,5 +132,6 @@ else()
     add_test(NAME Test7 COMMAND test7)
     add_test(NAME Test8 COMMAND test8)
     add_test(NAME Test9 COMMAND test9)
+    add_test(NAME Test10 COMMAND test10)
     add_test(NAME fib COMMAND fib)
 endif()
