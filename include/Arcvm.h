@@ -30,6 +30,7 @@
 #include <cstdint>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 using i8  = int8_t;
 using i16 = int16_t;
@@ -167,6 +168,8 @@ class Arcvm {
                 ltequalf_register_register,
 
                 push_string,
+                free_string,
+                string_len,
 
                 jump_short,
                 jump_long,
@@ -177,6 +180,25 @@ class Arcvm {
                 call_long,
 
                 load_arg,
+
+                dup,
+            };
+
+            struct string {
+                u32 length;
+                char *data;
+
+                string() = default;
+
+                string(u32 length, char *data):
+                    length(length), data(data)
+                {
+
+                }
+
+                ~string() {
+                    delete[] data;
+                }
             };
 
         Arcvm();
@@ -201,7 +223,6 @@ class Arcvm {
 
         i32 exit_code_;
 
-    
         bool verifySignature();
         void execute();
         

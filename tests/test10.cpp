@@ -22,20 +22,26 @@ int main(int, char**) {
 
         // code section
         vm::push_string,
+        0x02,
+        0x00,
+        0x00,
+        0x00,
         'H',
         'i',
         vm::push_string,
+        0x05,
+        0x00,
+        0x00,
+        0x00,
         'W',
         'o',
         'r',
         'l',
         'd',
+        vm::string_len,
         vm::ret,
     };
-    // yea.....
-    // this test is bound to break
-    // this literal is equivalent to the bottom 32 bits of 
-    // 0.1 + 1.8
-    expect<i32>(1724697805);
+
+    expect<u32>(5);
     return runTest(program);
 }

@@ -44,7 +44,7 @@ void Arcvm::execute() {
             
             // set the program counter equal to the max value so the program ends
             // I should probably change this in the future
-            program_counter_ = size_;                     
+            program_counter_ = size_;
             break;
         }
         case instruction::ret:
@@ -778,15 +778,33 @@ void Arcvm::execute() {
         {
             Register *dest = to_register(*next_byte());
             Register *src = to_register(*next_byte());
-            // add the two value as a signed integer then store as unsigned
+            // compare floats
             stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) <= reinterpret<f64>(src->x64)));
             break;
         }
         case instruction::push_string:
         {
-            // length = 32 bit unsigned immediate
-            // then there is {length} chars after
-            // maybe just store it in a std::string to make things easier
+            auto length = *reinterpret<u32*>(next_byte());
+            program_counter_ += 3;
+            auto buffer = new char[length];
+            for(u32 i = 0; i < length; ++i) {
+                buffer[i] = *next_byte();
+            }
+            stack_.push_back(reinterpret<u64>(new string(length, buffer)));
+            break;
+        }
+        case instruction::free_string:
+        {
+            string *str = reinterpret<string*>(stack_.back());
+            delete str;
+            break;
+        }
+        case instruction::string_len:
+        {
+            string *str = reinterpret<string*>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(str->length);
+            break;
         }
         case instruction::jump_short:
         {
@@ -854,6 +872,10 @@ void Arcvm::execute() {
         {
             stack_.push_back(stack_[base_pointer_ - (3LL + *next_byte())]);
             break;
+        }
+        case instruction::dup:
+        {
+            stack_.push_back(stack_.back());
         }
 
         default:
