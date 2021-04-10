@@ -787,9 +787,8 @@ void Arcvm::execute() {
             auto length = *reinterpret<u32*>(next_byte());
             program_counter_ += 3;
             auto buffer = new char[length];
-            for(u32 i = 0; i < length; ++i) {
-                buffer[i] = *next_byte();
-            }
+            memcpy_s(buffer, length, program_ + program_counter_, length);
+            program_counter_ += length;
             stack_.push_back(reinterpret<u64>(new string(length, buffer)));
             break;
         }
