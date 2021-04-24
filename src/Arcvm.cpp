@@ -835,8 +835,6 @@ void Arcvm::execute() {
         {
             auto num_of_params = reinterpret<u8>(*next_byte());
             auto jump_address = reinterpret<u8>(*next_byte());
-            auto local_variable_space = *reinterpret<u32*>(next_byte());
-            program_counter_ += 3;
             // number of params
             stack_.push_back(num_of_params);
             // old return address
@@ -845,16 +843,14 @@ void Arcvm::execute() {
             stack_.push_back(base_pointer_);
             // the new base pointer is equal to the current stack pointer
             base_pointer_ = stack_pointer();
-            stack_.resize(stack_.size() + local_variable_space, 0);
             jump(jump_address);
             break;
         }
         case instruction::call_long:
         {
             auto num_of_params = reinterpret<u8>(*next_byte());
-            auto jump_address = reinterpret<u32>(*next_byte());
-            auto local_variable_space = *reinterpret<u32*>(next_byte());
-            program_counter_ += 3;
+            auto jump_address = reinterpret<u32>(*next_byte()); // doesn't actually take 32 bits
+            // program_counter_ += 2;
             // number of params
             stack_.push_back(num_of_params);
             // old return address
@@ -863,7 +859,6 @@ void Arcvm::execute() {
             stack_.push_back(base_pointer_);
             // the new base pointer is equal to the current stack pointer
             base_pointer_ = stack_pointer();
-            stack_.resize(stack_.size() + local_variable_space, 0);
             jump(jump_address);
             break;
         }
@@ -876,6 +871,28 @@ void Arcvm::execute() {
         {
             stack_.push_back(stack_.back());
         }
+        case instruction::allocate_locals:
+        {
+            auto locals = *next_byte();
+            for(auto i = 0; i < locals; ++i)
+                stack_.push_back(0);
+        }
+        case instruction::deallocate_locals:
+        {
+            auto locals = *next_byte();
+            for(auto i = 0; i < locals; ++i)
+                stack_.pop_back();
+        }
+        case instruction::set_local:
+        {
+            // set local n to the value on top of the stack
+        }
+        case instruction::load_local:
+        {
+            // assumes program is semantically correct
+            // loads local at base_pointer + arg onto the stack
+        }
+
 
         default:
             break;

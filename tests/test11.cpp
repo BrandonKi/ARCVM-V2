@@ -1,7 +1,7 @@
 #include "test.h"
 
 /**
- * test equality instructions
+ * test local variables
  */
 int main(int, char**) {
     
@@ -18,18 +18,17 @@ int main(int, char**) {
 
         // code section
         vm::push_value_unsigned_8,
-        0x64,
-        vm::push_value_unsigned_8,
-        0x64,
-        vm::equalu,
-        vm::push_value_unsigned_8,
-        0x64,
-        vm::push_value_unsigned_8,
-        0x64,
-        vm::equalu,
-        vm::equalu,
-        vm::ret
+        0x05,
+        vm::set_local,
+        0x00,
+        vm::load_local,
+        0x00,
+        vm::load_local,
+        0x00,
+        vm::addu,
+        vm::ret,
     };
-    expect<u32>(1);
+
+    expect<u32>(10);
     return runTest(program);
 }

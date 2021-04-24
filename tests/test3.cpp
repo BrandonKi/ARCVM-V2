@@ -13,11 +13,7 @@ int main(int, char**) {
         0x00,
         vm::call_short,
         0x00,
-        0x0a,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
+        0x06,
         vm::exit,
 
         // code section

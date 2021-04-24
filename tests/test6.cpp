@@ -17,11 +17,7 @@ int main(int, char**) {
         0x0a,
         vm::call_short,
         0x02,
-        0x0e,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
+        0x0a,
         vm::exit,
 
         // code section
