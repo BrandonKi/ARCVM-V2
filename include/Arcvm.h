@@ -181,6 +181,11 @@ class Arcvm {
 
                 load_arg,
 
+                allocate_locals,
+                deallocate_locals,
+                set_local,
+                load_local,
+
                 dup,
             };
 
