@@ -17,15 +17,19 @@ int main(int, char**) {
         vm::exit,
 
         // code section
+        vm::allocate_locals,
+        0x01,
         vm::push_value_unsigned_8,
         0x05,
         vm::set_local,
-        0x00,
+        0x01,
         vm::load_local,
-        0x00,
+        0x01,
         vm::load_local,
-        0x00,
+        0x01,
         vm::addu,
+        vm::deallocate_locals,
+        0x01,
         vm::ret,
     };
 

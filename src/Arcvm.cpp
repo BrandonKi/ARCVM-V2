@@ -870,27 +870,37 @@ void Arcvm::execute() {
         case instruction::dup:
         {
             stack_.push_back(stack_.back());
+            break;
         }
         case instruction::allocate_locals:
         {
             auto locals = *next_byte();
             for(auto i = 0; i < locals; ++i)
                 stack_.push_back(0);
+            break;
         }
         case instruction::deallocate_locals:
         {
             auto locals = *next_byte();
-            for(auto i = 0; i < locals; ++i)
-                stack_.pop_back();
+            // for(auto i = 0; i < locals; ++i)
+            //     stack_.pop_back();
+            // break;
+
+            stack_.erase(stack_.end() - locals - 1, stack_.end() - 1);
+            break;
         }
         case instruction::set_local:
         {
-            // set local n to the value on top of the stack
+            auto val = *next_byte();
+            stack_[base_pointer_ + val] = stack_.back();
+            stack_.pop_back();
+            break;
         }
         case instruction::load_local:
         {
-            // assumes program is semantically correct
-            // loads local at base_pointer + arg onto the stack
+            auto val = *next_byte();
+            stack_.push_back(stack_[base_pointer_ + val]);
+            break;
         }
 
 
