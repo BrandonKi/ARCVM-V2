@@ -32,6 +32,8 @@
 #include <iostream>
 #include <memory>
 
+#include <small_profiler.h>
+
 using i8  = int8_t;
 using i16 = int16_t;
 using i32 = int32_t;
@@ -170,6 +172,7 @@ class Arcvm {
                 push_string,
                 free_string,
                 string_len,
+                string_add,
 
                 jump_short,
                 jump_long,
@@ -195,7 +198,7 @@ class Arcvm {
 
                 string() = default;
 
-                string(u32 length, char *data):
+                string(const u32 length, char *data):
                     length(length), data(data)
                 {
 
@@ -203,6 +206,13 @@ class Arcvm {
 
                 ~string() {
                     delete[] data;
+                }
+
+                string* operator + (const string& other) {
+                    auto* result = new char[this->length + other.length];
+                    memcpy_s(result, this->length, other.data, other.length);
+                    memcpy_s(result+other.length, this->length, other.data, other.length);
+                    return new string{ this->length + other.length, result };
                 }
             };
 

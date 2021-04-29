@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
 
 #include "Arcvm.h"
 
@@ -8,6 +7,7 @@
 std::string parse_args(const int, const char**);
 
 int main(const int argc, const char** argv) {
+    PROFILE();
     const auto filename = parse_args(argc, argv);
 
     // read the file into a u8 buffer
@@ -15,7 +15,7 @@ int main(const int argc, const char** argv) {
     std::ifstream input_file(filename, std::ios::in|std::ios::binary|std::ios::ate);
     const auto size = static_cast<u32>(input_file.tellg());
     input_file.seekg (0, std::ios::beg);
-    auto* buffer = new char[size];
+    auto* buffer = new char[size];  // no reason to delete
     input_file.read(buffer, size);
     input_file.close();
     Arcvm vm;
@@ -26,6 +26,7 @@ int main(const int argc, const char** argv) {
 }
 
 std::string parse_args(const int argc, const char** argv) {
+    PROFILE();
     // TODO this is not complete at all
     // at the moment it expects one argument that is a valid file path
     std::vector<std::string> args(argv, argv + argc);
