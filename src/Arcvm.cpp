@@ -884,7 +884,7 @@ void Arcvm::execute() {
             PROFILE_SCOPE("push_string");
             auto length = *reinterpret<u32*>(next_byte());
             program_counter_ += 3;
-            auto buffer = new char[length];
+            auto *buffer = new char[length];
             memcpy_s(buffer, length, program_ + program_counter_, length);
             program_counter_ += length;
             stack_.push_back(reinterpret<u64>(new string(length, buffer)));
@@ -893,16 +893,28 @@ void Arcvm::execute() {
         case instruction::free_string:
         {
             PROFILE_SCOPE("free_string");
-            string* str = reinterpret<string*>(stack_.back());
+            auto *str = reinterpret<string*>(stack_.back());
             delete str;
             break;
         }
         case instruction::string_len:
         {
             PROFILE_SCOPE("string_len");
-            string* str = reinterpret<string*>(stack_.back());
+            auto *str = reinterpret<string*>(stack_.back());
             stack_.pop_back();
             stack_.push_back(str->length);
+            break;
+        }
+        case instruction::string_add:
+        {
+            PROFILE_SCOPE("string_add");
+            auto* left = reinterpret<string*>(stack_.back());
+            stack_.pop_back();
+            auto* right = reinterpret<string*>(stack_.back());
+            stack_.pop_back();
+            stack_.push_back(reinterpret<u64>(*left + *right));
+            delete left;
+            delete right;
             break;
         }
         case instruction::jump_short:

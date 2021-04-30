@@ -99,6 +99,12 @@ set_target_properties( test11
     RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
 )
 
+add_executable(test12 tests/test12.cpp $<TARGET_OBJECTS:arcvm>)
+set_target_properties( test12
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${test_bin_dir}
+)
+
 add_executable(fib tests/fib.cpp $<TARGET_OBJECTS:arcvm>)
 set_target_properties( fib
     PROPERTIES
@@ -129,6 +135,7 @@ if(${FIX_TEST_UI_BUG})
     add_test(Test9 ${test_exe_path}/test9)
     add_test(Test10 ${test_exe_path}/test10)
     add_test(Test11 ${test_exe_path}/test11)
+    add_test(Test12 ${test_exe_path}/test12)
     add_test(fib ${test_exe_path}/fib)
 else()
     add_test(NAME Test0 COMMAND test0)
@@ -143,5 +150,6 @@ else()
     add_test(NAME Test9 COMMAND test9)
     add_test(NAME Test10 COMMAND test10)
     add_test(NAME Test11 COMMAND test11)
+    add_test(NAME Test12 COMMAND test12)
     add_test(NAME fib COMMAND fib)
 endif()
