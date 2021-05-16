@@ -245,7 +245,7 @@ class Arcvm {
          * reinterpret data as a different type
          */
         template <typename T, typename U>
-        constexpr inline T reinterpret(U data) const {
+        [[nodiscard]] constexpr inline T reinterpret(U data) const {
             T temp;
             memcpy_s(&temp, sizeof(T), &data, sizeof(U));
             return temp;
@@ -254,7 +254,7 @@ class Arcvm {
         /**
          * return a pointer to the current byte in the program 
          */
-        constexpr inline u8 *current_byte() const noexcept {
+        [[nodiscard]] constexpr inline u8 *current_byte() const noexcept {
             return &program_[program_counter_];
         }
 
@@ -270,14 +270,14 @@ class Arcvm {
          * return the register represented by the given byte
          * 
          */
-        constexpr inline Register* to_register(const u8 reg_num) noexcept {
+        [[nodiscard]] constexpr inline Register* to_register(const u8 reg_num) noexcept {
             return &registers_[reg_num];
         }
 
         /**
          * return the current stack pointer
          */
-        inline u64 stack_pointer() const noexcept {
+        [[nodiscard]] inline u64 stack_pointer() const noexcept {
             return stack_.size() - 1;
         }
 

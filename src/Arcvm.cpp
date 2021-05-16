@@ -885,7 +885,7 @@ void Arcvm::execute() {
             auto length = *reinterpret<u32*>(next_byte());
             program_counter_ += 3;
             auto *buffer = new char[length];
-            memcpy_s(buffer, length, program_ + program_counter_, length);
+            memcpy_s(buffer, length, program_ + program_counter_ + 1, length);
             program_counter_ += length;
             stack_.push_back(reinterpret<u64>(new string(length, buffer)));
             break;
@@ -983,7 +983,7 @@ void Arcvm::execute() {
         case instruction::load_arg:
         {
             PROFILE_SCOPE("load_arg");
-            stack_.push_back(stack_[base_pointer_ - (3LL + *next_byte())]);
+            stack_.push_back(stack_[static_cast<u32>(base_pointer_ - (3LL + *next_byte()))]);
             break;
         }
         case instruction::dup:
@@ -1015,7 +1015,7 @@ void Arcvm::execute() {
         {
             PROFILE_SCOPE("set_local");
             auto val = *next_byte();
-            stack_[base_pointer_ + val] = stack_.back();
+            stack_[static_cast<u32>(base_pointer_ + val)] = stack_.back();
             stack_.pop_back();
             break;
         }
@@ -1023,11 +1023,9 @@ void Arcvm::execute() {
         {
             PROFILE_SCOPE("load_local");
             auto val = *next_byte();
-            stack_.push_back(stack_[base_pointer_ + val]);
+            stack_.push_back(stack_[static_cast<u32>(base_pointer_ + val)]);
             break;
         }
-
-
         default:
             break;
     }
