@@ -246,6 +246,7 @@ class Arcvm {
          */
         template <typename T, typename U>
         [[nodiscard]] constexpr inline T reinterpret(U data) const {
+            static_assert(sizeof(T) <= sizeof(U), "The size of the result type must be <= the size of the parameter");
             T temp;
             memcpy_s(&temp, sizeof(T), &data, sizeof(U));
             return temp;

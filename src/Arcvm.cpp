@@ -568,7 +568,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<i64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 == op1));
+            stack_.push_back(op2 == op1);
             break;
         }
         case instruction::equals_register_register:
@@ -577,7 +577,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) == reinterpret<i64>(src->x64)));
+            stack_.push_back(reinterpret<i64>(dest->x64) == reinterpret<i64>(src->x64));
             break;
         }
         case instruction::equalf:
@@ -587,7 +587,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<f64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 == op1));
+            stack_.push_back(op2 == op1);
             break;
         }
         case instruction::equalf_register_register:
@@ -596,7 +596,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) == reinterpret<f64>(src->x64)));
+            stack_.push_back(reinterpret<f64>(dest->x64) == reinterpret<f64>(src->x64));
             break;
         }
         case instruction::not_equalu:
@@ -624,7 +624,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<i64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 != op1));
+            stack_.push_back(op2 != op1);
             break;
         }
         case instruction::not_equals_register_register:
@@ -633,7 +633,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) != reinterpret<i64>(src->x64)));
+            stack_.push_back(reinterpret<i64>(dest->x64) != reinterpret<i64>(src->x64));
             break;
         }
         case instruction::not_equalf:
@@ -643,7 +643,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<f64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 != op1));
+            stack_.push_back(op2 != op1);
             break;
         }
         case instruction::not_equalf_register_register:
@@ -652,7 +652,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) != reinterpret<f64>(src->x64)));
+            stack_.push_back(reinterpret<f64>(dest->x64) != reinterpret<f64>(src->x64));
             break;
         }
         case instruction::gtu:
@@ -680,7 +680,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<i64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 > op1));
+            stack_.push_back(op2 > op1);
             break;
         }
         case instruction::gts_register_register:
@@ -689,7 +689,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) > reinterpret<i64>(src->x64)));
+            stack_.push_back(reinterpret<i64>(dest->x64) > reinterpret<i64>(src->x64));
             break;
         }
         case instruction::gtf:
@@ -699,7 +699,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<f64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 > op1));
+            stack_.push_back(op2 > op1);
             break;
         }
         case instruction::gtf_register_register:
@@ -708,7 +708,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) > reinterpret<f64>(src->x64)));
+            stack_.push_back(reinterpret<f64>(dest->x64) > reinterpret<f64>(src->x64));
             break;
         }
         case instruction::gtequalu:
@@ -736,7 +736,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<i64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 >= op1));
+            stack_.push_back(op2 >= op1);
             break;
         }
         case instruction::gtequals_register_register:
@@ -745,7 +745,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) >= reinterpret<i64>(src->x64)));
+            stack_.push_back(reinterpret<i64>(dest->x64) >= reinterpret<i64>(src->x64));
             break;
         }
         case instruction::gtequalf:
@@ -755,7 +755,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<f64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 >= op1));
+            stack_.push_back(op2 >= op1);
             break;
         }
         case instruction::gtequalf_register_register:
@@ -764,7 +764,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) >= reinterpret<f64>(src->x64)));
+            stack_.push_back(reinterpret<f64>(dest->x64) >= reinterpret<f64>(src->x64));
             break;
         }
         case instruction::ltu:
@@ -792,7 +792,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<i64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 < op1));
+            stack_.push_back(op2 < op1);
             break;
         }
         case instruction::lts_register_register:
@@ -801,7 +801,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) < reinterpret<i64>(src->x64)));
+            stack_.push_back(reinterpret<i64>(dest->x64) < reinterpret<i64>(src->x64));
             break;
         }
         case instruction::ltf:
@@ -811,7 +811,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<f64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 < op1));
+            stack_.push_back(op2 < op1);
             break;
         }
         case instruction::ltf_register_register:
@@ -820,7 +820,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) < reinterpret<f64>(src->x64)));
+            stack_.push_back(reinterpret<f64>(dest->x64) < reinterpret<f64>(src->x64));
             break;
         }
         case instruction::ltequalu:
@@ -848,7 +848,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<i64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 <= op1));
+            stack_.push_back(op2 <= op1);
             break;
         }
         case instruction::ltequals_register_register:
@@ -857,7 +857,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // add the two value as a signed integer then store as unsigned
-            stack_.push_back(reinterpret<u64>(reinterpret<i64>(dest->x64) <= reinterpret<i64>(src->x64)));
+            stack_.push_back(reinterpret<i64>(dest->x64) <= reinterpret<i64>(src->x64));
             break;
         }
         case instruction::ltequalf:
@@ -867,7 +867,7 @@ void Arcvm::execute() {
             stack_.pop_back();
             auto op2 = reinterpret<f64>(stack_.back());
             stack_.pop_back();
-            stack_.push_back(reinterpret<u64>(op2 <= op1));
+            stack_.push_back(op2 <= op1);
             break;
         }
         case instruction::ltequalf_register_register:
@@ -876,7 +876,7 @@ void Arcvm::execute() {
             Register* dest = to_register(*next_byte());
             Register* src = to_register(*next_byte());
             // compare floats
-            stack_.push_back(reinterpret<u64>(reinterpret<f64>(dest->x64) <= reinterpret<f64>(src->x64)));
+            stack_.push_back(reinterpret<f64>(dest->x64) <= reinterpret<f64>(src->x64));
             break;
         }
         case instruction::push_string:
@@ -967,8 +967,8 @@ void Arcvm::execute() {
         {
             PROFILE_SCOPE("call_long");
             auto num_of_params = reinterpret<u8>(*next_byte());
-            auto jump_address = reinterpret<u32>(*next_byte()); // doesn't actually take 32 bits
-            // program_counter_ += 2;
+            auto jump_address = static_cast<u32>(*next_byte()); // TODO actually take 32 bits instead of 8
+            program_counter_ += 3;
             // number of params
             stack_.push_back(num_of_params);
             // old return address
@@ -1004,10 +1004,6 @@ void Arcvm::execute() {
         {
             PROFILE_SCOPE("deallocate_locals");
             auto locals = *next_byte();
-            // for(auto i = 0; i < locals; ++i)
-            //     stack_.pop_back();
-            // break;
-
             stack_.erase(stack_.end() - locals - 1, stack_.end() - 1);
             break;
         }
