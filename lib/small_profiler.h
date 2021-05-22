@@ -56,8 +56,8 @@
 #define PROFILE()
 #define PROFILE(x) PROFILE()
 #else
-#define PROFILE() small_profiler::internal_scoped_profiler CONCAT(_small_profiler_temp_, __LINE__){__FUNCTION__}
-#define PROFILE_SCOPE(x) small_profiler::internal_scoped_profiler CONCAT(_small_profiler_temp_, __LINE__){x}
+#define PROFILE() small_profiler::internal_scoped_profiler CONCAT(_small_profiler_temp_, __COUNTER__){__FUNCTION__}
+#define PROFILE_SCOPE(x) small_profiler::internal_scoped_profiler CONCAT(_small_profiler_temp_, __COUNTER__){x}
 namespace small_profiler {
 
     inline unsigned long long get_pid() {
