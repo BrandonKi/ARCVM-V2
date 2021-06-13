@@ -21,6 +21,17 @@ set_target_properties( ARCVM-V2
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
 )
 
+set(arcd_sources
+    src/disassembler.cpp
+)
+
+add_executable(ARCD ${arcd_sources})
+
+set_target_properties( ARCD
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
+)
+
 include(CTest)
 enable_testing()
 
