@@ -10,4 +10,11 @@ while result[-1:] != '}':
     result += content[start + count]
     count += 1
 
-print('\n'.join([el.strip() for el in result[result.find('{')+1:-1].split(',') if len(el.strip()) > 0]))
+instructions = '\n'.join([el.strip() for el in result[result.find('{')+1:-1].split(',') if len(el.strip()) > 0])
+# print(instructions)
+instructions = instructions.split('\n');
+
+for instruction in instructions:
+    print('case instruction::' + instruction + ':')
+    print(f'\tstd::cout << "{instruction}\\n";');
+    print('\tbreak;')
