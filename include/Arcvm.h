@@ -34,16 +34,7 @@
 
 #include <small_profiler.h>
 
-using i8  = int8_t;
-using i16 = int16_t;
-using i32 = int32_t;
-using i64 = int64_t;
-using u8  = uint8_t;
-using u16 = uint16_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
-using f32 = float_t;
-using f64 = double_t;
+#include "util.h"
 
 class Arcvm {
 
@@ -56,165 +47,165 @@ class Arcvm {
         };
 
         enum instruction {
-                exit,
-                ret,
+            exit,
+            ret,
 
-                mov_register_value,
-                mov_register_address, 
-                mov_register_register,
-                mov_address_value,
-                mov_address_address,
-                mov_address_register,
+            mov_register_value,
+            mov_register_address, 
+            mov_register_register,
+            mov_address_value,
+            mov_address_address,
+            mov_address_register,
 
-                push_value,
-                push_value_float_32,
-                push_value_float_64,
-                push_value_1,
-                push_value_signed_8,
-                push_value_signed_16,
-                push_value_signed_32,
-                push_value_signed_64,
-                push_value_unsigned_8,
-                push_value_unsigned_16,
-                push_value_unsigned_32,
-                push_value_unsigned_64,
+            push_value,
+            push_value_float_32,
+            push_value_float_64,
+            push_value_1,
+            push_value_signed_8,
+            push_value_signed_16,
+            push_value_signed_32,
+            push_value_signed_64,
+            push_value_unsigned_8,
+            push_value_unsigned_16,
+            push_value_unsigned_32,
+            push_value_unsigned_64,
 
-                push_address,
-                push_register,
-                pop_register,
-                pop_address,
+            push_address,
+            push_register,
+            pop_register,
+            pop_address,
 
-                addu,
-                addu_register_register,
-                adds,
-                adds_register_register,
-                addf,
-                addf_register_register,
+            addu,
+            addu_register_register,
+            adds,
+            adds_register_register,
+            addf,
+            addf_register_register,
 
-                subu,
-                subu_register_register,
-                subs,
-                subs_register_register,
-                subf,
-                subf_register_register,
+            subu,
+            subu_register_register,
+            subs,
+            subs_register_register,
+            subf,
+            subf_register_register,
 
-                mulu,
-                mulu_register_register,
-                muls,
-                muls_register_register,
-                mulf,
-                mulf_register_register,
+            mulu,
+            mulu_register_register,
+            muls,
+            muls_register_register,
+            mulf,
+            mulf_register_register,
 
-                divu,
-                divu_register_register,
-                divs,
-                divs_register_register,
-                divf,
-                divf_register_register,
+            divu,
+            divu_register_register,
+            divs,
+            divs_register_register,
+            divf,
+            divf_register_register,
 
-                modu,
-                modu_register_register,
-                mods,
-                mods_register_register,
+            modu,
+            modu_register_register,
+            mods,
+            mods_register_register,
 
-                andu,
-                andu_register_register,
-                ands,
-                ands_register_register,
+            andu,
+            andu_register_register,
+            ands,
+            ands_register_register,
 
-                oru,
-                oru_register_register,
-                ors,
-                ors_register_register,
+            oru,
+            oru_register_register,
+            ors,
+            ors_register_register,
 
-                equalu,
-                equalu_register_register,
-                equals,
-                equals_register_register,
-                equalf,
-                equalf_register_register,
+            equalu,
+            equalu_register_register,
+            equals,
+            equals_register_register,
+            equalf,
+            equalf_register_register,
 
-                not_equalu,
-                not_equalu_register_register,
-                not_equals,
-                not_equals_register_register,
-                not_equalf,
-                not_equalf_register_register,
+            not_equalu,
+            not_equalu_register_register,
+            not_equals,
+            not_equals_register_register,
+            not_equalf,
+            not_equalf_register_register,
 
-                gtu,
-                gtu_register_register,
-                gts,
-                gts_register_register,
-                gtf,
-                gtf_register_register,
+            gtu,
+            gtu_register_register,
+            gts,
+            gts_register_register,
+            gtf,
+            gtf_register_register,
 
-                gtequalu,
-                gtequalu_register_register,
-                gtequals,
-                gtequals_register_register,
-                gtequalf,
-                gtequalf_register_register,
+            gtequalu,
+            gtequalu_register_register,
+            gtequals,
+            gtequals_register_register,
+            gtequalf,
+            gtequalf_register_register,
 
-                ltu,
-                ltu_register_register,
-                lts,
-                lts_register_register,
-                ltf,
-                ltf_register_register,
+            ltu,
+            ltu_register_register,
+            lts,
+            lts_register_register,
+            ltf,
+            ltf_register_register,
 
-                ltequalu,
-                ltequalu_register_register,
-                ltequals,
-                ltequals_register_register,
-                ltequalf,
-                ltequalf_register_register,
+            ltequalu,
+            ltequalu_register_register,
+            ltequals,
+            ltequals_register_register,
+            ltequalf,
+            ltequalf_register_register,
 
-                push_string,
-                free_string,
-                string_len,
-                string_add,
+            push_string,
+            free_string,
+            string_len,
+            string_add,
 
-                jump_short,
-                jump_long,
-                jump_ifzero,
-                jump_ifnzero,
+            jump_short,
+            jump_long,
+            jump_ifzero,
+            jump_ifnzero,
 
-                call_short,
-                call_long,
+            call_short,
+            call_long,
 
-                load_arg,
+            load_arg,
 
-                allocate_locals,
-                deallocate_locals,
-                set_local,
-                load_local,
+            allocate_locals,
+            deallocate_locals,
+            set_local,
+            load_local,
 
-                dup,
-            };
+            dup,
+        };
 
-            struct string {
-                u32 length;
-                char *data;
+        struct string {
+            u32 length;
+            char *data;
 
-                string() = default;
+            string() = default;
 
-                string(const u32 length, char *data):
-                    length(length), data(data)
-                {
+            string(const u32 length, char *data):
+                length(length), data(data)
+            {
 
-                }
+            }
 
-                ~string() {
-                    delete[] data;
-                }
+            ~string() {
+                delete[] data;
+            }
 
-                string* operator + (const string& other) {
-                    auto* result = new char[this->length + other.length];
-                    memcpy_s(result, this->length, other.data, other.length);
-                    memcpy_s(result+other.length, this->length, other.data, other.length);
-                    return new string{ this->length + other.length, result };
-                }
-            };
+            string* operator + (const string& other) {
+                auto* result = new char[this->length + other.length];
+                memcpy_s(result, this->length, other.data, other.length);
+                memcpy_s(result+other.length, this->length, other.data, other.length);
+                return new string{ this->length + other.length, result };
+            }
+        };
 
         Arcvm();
         ~Arcvm();

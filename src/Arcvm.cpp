@@ -983,6 +983,7 @@ void Arcvm::execute() {
         case instruction::load_arg:
         {
             PROFILE_SCOPE("load_arg");
+            // TODO explain this magic number 3LL
             stack_.push_back(stack_[static_cast<u32>(base_pointer_ - (3LL + *next_byte()))]);
             break;
         }

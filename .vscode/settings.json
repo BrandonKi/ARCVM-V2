@@ -50,6 +50,13 @@
         "xmemory": "cpp",
         "xstddef": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "bit": "cpp",
+        "chrono": "cpp",
+        "clocale": "cpp",
+        "ctime": "cpp",
+        "ratio": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     }
 }
