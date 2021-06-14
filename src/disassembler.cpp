@@ -41,52 +41,61 @@ void disassemble(u8 *buffer, size_t size) {
             std::cout << "mov_address_register\n";
             break;
         case instruction::push_value:
-            std::cout << "push_value\n";
-            i += 8;
+            i += 1;
+            std::cout << "push_value " << *reinterpret<u64*>(buffer + i) << '\n';
+            i += 7;
             break;
         case instruction::push_value_float_32:
-            std::cout << "push_value_float_32\n";
-            i += 4;
+            i += 1;
+            std::cout << "push_value_float_32 " << *reinterpret<f32*>(buffer + i) << '\n';
+            i += 3;
             break;
         case instruction::push_value_float_64:
-            std::cout << "push_value_float_64\n";
-            i += 8;
+            i += 1;
+            std::cout << "push_value_float_64 " << *reinterpret<f64*>(buffer + i) << '\n';
+            i += 7;
             break;
         case instruction::push_value_1:
-            std::cout << "push_value_1\n";
             i += 1;
+            std::cout << "push_value_1" << static_cast<i32>(reinterpret<i8>(buffer[i])) << '\n';
             break;
         case instruction::push_value_signed_8:
-            std::cout << "push_value_signed_8\n";
             i += 1;
+            std::cout << "push_value_signed_8 " << static_cast<i32>(reinterpret<i8>(buffer[i])) << '\n';
             break;
         case instruction::push_value_signed_16:
-            std::cout << "push_value_signed_16\n";
+            i += 1;
+            std::cout << "push_value_signed_16 " << *reinterpret<i16*>(buffer + i) << '\n';
             i += 1;
             break;
         case instruction::push_value_signed_32:
-            std::cout << "push_value_signed_32\n";
-            i += 4;
+            i += 1;
+            std::cout << "push_value_signed_32 " << *reinterpret<i32*>(buffer + i) << '\n';
+            i += 3;
             break;
         case instruction::push_value_signed_64:
-            std::cout << "push_value_signed_64\n";
-            i += 8;
+            i += 1;
+            std::cout << "push_value_signed_64 " << *reinterpret<i64*>(buffer + i) << '\n';
+            i += 7;
             break;
         case instruction::push_value_unsigned_8:
-            std::cout << "push_value_unsigned_8\n";
             i += 1;
+            std::cout << "push_value_unsigned_8 " << static_cast<u32>(buffer[i]) << '\n';
             break;
         case instruction::push_value_unsigned_16:
-            std::cout << "push_value_unsigned_16\n";
+            i += 1;
+            std::cout << "push_value_unsigned_16 " << *reinterpret<u16*>(buffer + i) << '\n';
             i += 1;
             break;
         case instruction::push_value_unsigned_32:
-            std::cout << "push_value_unsigned_32\n";
-            i += 4;
+            i += 1;
+            std::cout << "push_value_unsigned_32 " << *reinterpret<u32*>(buffer + i) << '\n';
+            i += 3;
             break;
         case instruction::push_value_unsigned_64:
-            std::cout << "push_value_unsigned_64\n";
-            i += 8;
+            i += 1;
+            std::cout << "push_value_unsigned_64 " << *reinterpret<u64*>(buffer + i) << '\n';
+            i += 7;
             break;
         case instruction::push_address:
             std::cout << "push_address\n";
@@ -317,6 +326,8 @@ void disassemble(u8 *buffer, size_t size) {
             std::cout << "ltequalf_register_register\n";
             break;
         case instruction::push_string:
+            i += *reinterpret<u32*>(buffer + i);
+            i += 4;
             std::cout << "push_string\n";
             break;
         case instruction::free_string:
@@ -329,44 +340,50 @@ void disassemble(u8 *buffer, size_t size) {
             std::cout << "string_add\n";
             break;
         case instruction::jump_short:
-            std::cout << "jump_short\n";
+            i += 1;
+            std::cout << "jump_short " << static_cast<u32>(buffer[i]) << '\n';;
             break;
         case instruction::jump_long:
-            std::cout << "jump_long\n";
+            i += 1;
+            std::cout << "jump_long " << static_cast<u32>(buffer[i]) << '\n';;
             break;
         case instruction::jump_ifzero:
-            std::cout << "jump_ifzero\n";
+            i += 1;
+            std::cout << "jump_ifzero " << static_cast<u32>(buffer[i]) << '\n';;
             break;
         case instruction::jump_ifnzero:
-            std::cout << "jump_ifnzero\n";
+            i += 1;
+            std::cout << "jump_ifnzero " << static_cast<u32>(buffer[i]) << '\n';;
             break;
         case instruction::call_short:
-            std::cout << "call_short\n";
-            i += 2;
+            i += 1;
+            std::cout << "call_short " << static_cast<u32>(buffer[i]) << ' ' << static_cast<u32>(buffer[i + 1]) << '\n';;
+            i += 1;
             break;
         case instruction::call_long:
-            std::cout << "call_long\n";
-            i += 4;
+            i += 1;
+            std::cout << "call_long " << *reinterpret<u32*>(buffer + i) << '\n';
+            i += 3;
             break;
         case instruction::load_arg:
-            std::cout << "load_arg\n";
             i += 1;
+            std::cout << "load_arg " << static_cast<u32>(buffer[i]) << '\n';
             break;
         case instruction::allocate_locals:
-            std::cout << "allocate_locals\n";
             i += 1;
+            std::cout << "allocate_locals " << static_cast<u32>(buffer[i]) << '\n';
             break;
         case instruction::deallocate_locals:
-            std::cout << "deallocate_locals\n";
             i += 1;
+            std::cout << "deallocate_locals "  << static_cast<u32>(buffer[i]) << '\n';
             break;
         case instruction::set_local:
-            std::cout << "set_local\n";
             i += 1;
+            std::cout << "set_local " << static_cast<u32>(buffer[i]) << '\n';
             break;
         case instruction::load_local:
-            std::cout << "load_local\n";
             i += 1;
+            std::cout << "load_local " << static_cast<u32>(buffer[i]) << '\n';
             break;
         case instruction::dup:
             std::cout << "dup\n";
