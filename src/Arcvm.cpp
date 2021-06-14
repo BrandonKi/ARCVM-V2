@@ -926,6 +926,7 @@ void Arcvm::execute() {
         case instruction::jump_long:
         {
             PROFILE_SCOPE("jump_long");
+            //TODO this doesn't work
             jump(reinterpret<u8>(*reinterpret<u32*>(next_byte())));
             break;
         }
