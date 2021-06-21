@@ -32,6 +32,14 @@ set_target_properties( ARCD
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
 )
 
+if(MSVC)
+  target_compile_options(ARCVM-V2 PRIVATE /W3 /Wall /wd4668 /wd5039 /wd5045)
+  target_compile_options(ARCD PRIVATE /W3 /Wall /wd4668 /wd5039 /wd5045)
+else()
+  target_compile_options(ARCVM-V2 PRIVATE -Wall -Wextra -pedantic -Werror)
+  target_compile_options(ARCD PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 include(CTest)
 enable_testing()
 

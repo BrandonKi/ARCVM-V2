@@ -117,7 +117,7 @@ void Arcvm::execute() {
         case push_value_1:
         {
             PROFILE_SCOPE("push_value_1");
-            u8 value = (*next_byte()) & 0x01;
+            u8 value = static_cast<u8>((*next_byte()) & 0x01);
             stack_.push_back(static_cast<u64>(value));
             break;
         }

@@ -8,13 +8,14 @@ using instruction = Arcvm::instruction;
 void disassemble(u8 *, size_t);
 
 int main(int argc, char *argv[]) {
+    static_cast<void>(argc);
     auto *filename = argv[1];
     auto file = read_bin_file(filename);
     disassemble(file.buffer, file.size);
 }
 
 void disassemble(u8 *buffer, size_t size) {
-    for (auto i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; ++i) {
         switch (buffer[i]) {
         case instruction::exit:
             std::cout << "exit\n";

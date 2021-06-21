@@ -184,13 +184,13 @@ class Arcvm {
         };
 
         struct string {
-            u32 length;
             char *data;
+            u32 length;
 
             string() = default;
 
             string(const u32 length, char *data):
-                length(length), data(data)
+                data(data), length(length)
             {
 
             }
