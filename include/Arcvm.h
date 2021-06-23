@@ -46,7 +46,7 @@ class Arcvm {
             u8  x8;
         };
 
-        enum instruction {
+        enum instruction : u8 {
             exit,
             ret,
 

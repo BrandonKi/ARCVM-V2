@@ -19,9 +19,11 @@ using f64 = double_t;
  */
 template <typename T, typename U>
 [[nodiscard]] constexpr inline T reinterpret(U data) {
-    static_assert(sizeof(T) <= sizeof(U), "The size of the result type must be <= the size of the parameter");
     T temp;
-    memcpy_s(&temp, sizeof(T), &data, sizeof(U));
+    temp = std::bit_cast<T>(data);
+    // needed for old c++ versions
+    // static_assert(sizeof(T) <= sizeof(U), "The size of the result type must be <= the size of the parameter");
+    // memcpy_s(&temp, sizeof(T), &data, sizeof(U));
     return temp;
 }
 
